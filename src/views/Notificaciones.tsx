@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import {
   Bell, Check, Mail, GraduationCap, CalendarDays, Megaphone,
-  Briefcase, Gift, Settings, CheckCheck,
+  Briefcase, Gift, Settings, CheckCheck, AlertTriangle,
 } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import Badge from '@/components/Badge';
@@ -40,8 +40,15 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
     'Beneficios para socios': true,
   });
 
-  const filtered = notificaciones.filter((n) => tab === 'nuevas' ? !n.leida : n.leida);
+  const filtered = notificaciones
+    .filter((n) => tab === 'nuevas' ? !n.leida : n.leida)
+    .sort((a, b) => (a.prioridad === b.prioridad ? 0 : a.prioridad === 'emergente' ? -1 : 1));
   const nuevasCount = notificaciones.filter((n) => !n.leida).length;
+  const destinatarioLabel: Record<string, string> = {
+    directivos: 'Solo socios directivos',
+    'no-directivos': 'Solo socios no directivos',
+    todos: '',
+  };
 
   return (
     <div className="space-y-6">
@@ -84,15 +91,17 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
             {filtered.map((n) => {
               const Icon = catIcon[n.categoria];
               const tone = catTone[n.categoria];
+              const urgente = n.prioridad === 'emergente';
               return (
-                <div key={n.id} className={`flex items-start gap-3 px-5 py-4 ${!n.leida ? 'bg-brand-50/30' : ''}`}>
+                <div key={n.id} className={`flex items-start gap-3 px-5 py-4 ${urgente ? 'bg-rust-50/40' : !n.leida ? 'bg-brand-50/30' : ''}`}>
                   <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                    urgente ? 'bg-rust-100 text-rust-600' :
                     tone === 'brand' ? 'bg-brand-50 text-brand-600' :
                     tone === 'gold' ? 'bg-gold-50 text-gold-600' :
                     tone === 'jad' ? 'bg-jad-50 text-jad-600' :
                     tone === 'sol' ? 'bg-sol-50 text-sol-600' : 'bg-slate-100 text-slate-500'
                   }`}>
-                    <Icon className="h-5 w-5" />
+                    {urgente ? <AlertTriangle className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
@@ -100,8 +109,12 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
                       {!n.leida && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-brand-500" />}
                     </div>
                     <p className="mt-0.5 text-sm text-slate-600">{n.cuerpo}</p>
-                    <div className="mt-1.5 flex items-center gap-2">
+                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                      {urgente && <Badge tone="rust" variant="solid">Emergente</Badge>}
                       <Badge tone={tone} variant="soft">{n.categoria}</Badge>
+                      {destinatarioLabel[n.destinatario] && (
+                        <span className="text-xs font-medium text-slate-400">{destinatarioLabel[n.destinatario]}</span>
+                      )}
                       <span className="text-xs text-slate-400">{n.fecha}</span>
                     </div>
                   </div>

@@ -1,2 +1,3 @@
 import AdminLayout from '@/components/layouts/AdminLayout';
-export default function Page() { return <AdminLayout section="configuracion"><div className="surface flex flex-col items-center justify-center px-6 py-16 text-center"><h2 className="text-lg font-bold text-brand-900">Configuración</h2><p className="mt-1 text-sm text-slate-500">Esta sección forma parte del sistema y se encuentra disponible en el menú.</p></div></AdminLayout>; }
+import AdminConfiguracion from '@/views/admin/AdminConfiguracion';
+export default function Page() { return <AdminLayout section="configuracion"><AdminConfiguracion /></AdminLayout>; }

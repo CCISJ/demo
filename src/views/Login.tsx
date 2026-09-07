@@ -20,7 +20,7 @@ export default function Login() {
     <div className="grid min-h-screen lg:grid-cols-2">
       {/* Left brand panel */}
       <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-900 p-10 text-white lg:flex">
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, #3464a6 0, transparent 40%), radial-gradient(circle at 80% 70%, #274e88 0, transparent 45%)' }} />
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, #0ac259 0, transparent 40%), radial-gradient(circle at 80% 70%, #037032 0, transparent 45%)' }} />
         <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-gold-500/10 blur-2xl" />
         <div className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-brand-500/20 blur-3xl" />
 

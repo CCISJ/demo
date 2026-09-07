@@ -120,6 +120,8 @@ export const postulaciones: Postulacion[] = [
 ];
 
 export type NotifCategoria = 'Capacitaciones' | 'Eventos' | 'Comunicados' | 'Bolsa de trabajo' | 'Beneficios para socios';
+export type NotifPrioridad = 'comun' | 'emergente';
+export type NotifDestinatario = 'todos' | 'directivos' | 'no-directivos';
 
 export interface Notificacion {
   id: string;
@@ -128,16 +130,78 @@ export interface Notificacion {
   categoria: NotifCategoria;
   fecha: string;
   leida: boolean;
+  prioridad: NotifPrioridad;
+  destinatario: NotifDestinatario;
 }
 
 export const notificaciones: Notificacion[] = [
-  { id: 'N-301', titulo: 'Nueva postulación en tu oferta', cuerpo: 'Rodrigo Almirón se postuló a "Chofer de camión de larga distancia".', categoria: 'Bolsa de trabajo', fecha: 'Hace 12 min', leida: false },
-  { id: 'N-302', titulo: 'Capacitación: Gestión de equipos comerciales', cuerpo: 'Inicia el 02/09 a las 18:30 hs en la sede del CCISJ. Cupos limitados.', categoria: 'Capacitaciones', fecha: 'Hace 1 h', leida: false },
-  { id: 'N-303', titulo: 'Recordatorio de cuota societaria', cuerpo: 'Tu cuota del mes de agosto vence el 31/08. Evita perder beneficios.', categoria: 'Beneficios para socios', fecha: 'Hace 3 h', leida: false },
-  { id: 'N-304', titulo: 'Comunicado: feriado del 25 de agosto', cuerpo: 'La sede permanecerá cerrada por el aniversario de San José.', categoria: 'Comunicados', fecha: 'Ayer', leida: true },
-  { id: 'N-305', titulo: 'Evento: Encuentro empresarial del Sur', cuerpo: 'Jueves 12/09, 19:00 hs. Networking con socios y autoridades.', categoria: 'Eventos', fecha: 'Ayer', leida: true },
-  { id: 'N-306', titulo: 'Tu oferta fue cerrada', cuerpo: '"Atención al cliente call center" finalizó su período de publicación.', categoria: 'Bolsa de trabajo', fecha: '2 días', leida: true },
+  { id: 'N-308', titulo: 'Corte de suministro eléctrico programado', cuerpo: 'UTE informa corte de energía en la zona de la sede el viernes de 14 a 18 hs. Se recomienda reprogramar trámites presenciales.', categoria: 'Comunicados', fecha: 'Hace 8 min', leida: false, prioridad: 'emergente', destinatario: 'todos' },
+  { id: 'N-307', titulo: 'Convocatoria urgente: reunión de directiva', cuerpo: 'Se solicita la presencia de todos los socios directivos mañana a las 9:00 hs por un tema institucional urgente.', categoria: 'Comunicados', fecha: 'Hace 20 min', leida: false, prioridad: 'emergente', destinatario: 'directivos' },
+  { id: 'N-301', titulo: 'Nueva postulación en tu oferta', cuerpo: 'Rodrigo Almirón se postuló a "Chofer de camión de larga distancia".', categoria: 'Bolsa de trabajo', fecha: 'Hace 12 min', leida: false, prioridad: 'comun', destinatario: 'todos' },
+  { id: 'N-302', titulo: 'Capacitación: Gestión de equipos comerciales', cuerpo: 'Inicia el 02/09 a las 18:30 hs en la sede del CCISJ. Cupos limitados.', categoria: 'Capacitaciones', fecha: 'Hace 1 h', leida: false, prioridad: 'comun', destinatario: 'todos' },
+  { id: 'N-303', titulo: 'Recordatorio de cuota societaria', cuerpo: 'Tu cuota del mes de agosto vence el 30/09. Evita perder beneficios.', categoria: 'Beneficios para socios', fecha: 'Hace 3 h', leida: false, prioridad: 'comun', destinatario: 'no-directivos' },
+  { id: 'N-304', titulo: 'Comunicado: feriado del 25 de agosto', cuerpo: 'La sede permanecerá cerrada por el aniversario de San José.', categoria: 'Comunicados', fecha: 'Ayer', leida: true, prioridad: 'comun', destinatario: 'todos' },
+  { id: 'N-305', titulo: 'Evento: Encuentro empresarial del Sur', cuerpo: 'Jueves 12/09, 19:00 hs. Networking con socios y autoridades.', categoria: 'Eventos', fecha: 'Ayer', leida: true, prioridad: 'comun', destinatario: 'todos' },
+  { id: 'N-306', titulo: 'Tu oferta fue cerrada', cuerpo: '"Atención al cliente call center" finalizó su período de publicación.', categoria: 'Bolsa de trabajo', fecha: '2 días', leida: true, prioridad: 'comun', destinatario: 'todos' },
 ];
+
+// ---------------------------------------------------------------------------
+// Cuotas societarias: el valor se fija una vez al año (en enero) y rige los
+// 12 meses. La cuota de un mes se abona durante ese mes y tiene de plazo
+// hasta el fin del mes siguiente (configurable vía `mesesPlazo`).
+// ---------------------------------------------------------------------------
+
+export interface CuotaAnual {
+  anio: number;
+  valor: number;
+}
+
+export const cuotasPorAnio: CuotaAnual[] = [
+  { anio: 2023, valor: 7200 },
+  { anio: 2024, valor: 8400 },
+  { anio: 2025, valor: 9800 },
+  { anio: 2026, valor: 11500 },
+];
+
+export interface ConfigCuotas {
+  mesesPlazo: number; // 1 = la cuota de un mes vence a fin del mes siguiente
+}
+
+export const configCuotas: ConfigCuotas = { mesesPlazo: 1 };
+
+const nombresMes = [
+  'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+  'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
+];
+
+export const nombreMesVencimiento = (mesesPlazo: number) => {
+  const idx = ((0 + mesesPlazo) % 12 + 12) % 12;
+  return nombresMes[idx];
+};
+
+// ---------------------------------------------------------------------------
+// Gastos del mes: cargos adicionales que se SUMAN a la cuota societaria de
+// cada socio ese mes (no son gastos operativos del Centro). El total que un
+// socio termina abonando es cuota base + gastos del mes.
+// ---------------------------------------------------------------------------
+
+export interface GastoDelMes {
+  id: string;
+  concepto: string;
+  monto: number;
+}
+
+export const gastosDelMes: GastoDelMes[] = [
+  { id: 'G-01', concepto: 'Fondo de mantenimiento edilicio', monto: 350 },
+  { id: 'G-02', concepto: 'Aporte a capacitaciones', monto: 150 },
+];
+
+// ---------------------------------------------------------------------------
+// Reintegros a socios: el CCISJ indicó que cada socio tiene un valor de
+// reintegro distinto, pero todavía no se definieron los montos ni el
+// mecanismo de cálculo. Se deja como módulo pendiente hasta tener esa info
+// (ver tarjeta "En definición" en Configuración → Cuotas y costos).
+// ---------------------------------------------------------------------------
 
 export interface MovimientoCaja {
   id: string;

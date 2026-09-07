@@ -7,19 +7,19 @@ export default {
         sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Institutional navy — primary brand
+        // Institutional green — primary brand (CCISJ logo green)
         brand: {
-          50: '#eef4fb',
-          100: '#d6e4f5',
-          200: '#b3cdea',
-          300: '#84acd9',
-          400: '#5184c2',
-          500: '#3464a6',
-          600: '#274e88',
-          700: '#213f6f',
-          800: '#1d3559',
-          900: '#1a2e4b',
-          950: '#111e31',
+          50: '#f2faf6',
+          100: '#e3f7ec',
+          200: '#c0f2d5',
+          300: '#84ebb1',
+          400: '#30e880',
+          500: '#0ac259',
+          600: '#00923f',
+          700: '#037032',
+          800: '#055a29',
+          900: '#064722',
+          950: '#052914',
         },
         // Gold accent — prestige / commerce
         gold: {
