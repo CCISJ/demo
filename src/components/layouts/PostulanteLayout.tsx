@@ -34,7 +34,7 @@ export default function PostulanteLayout({ children, section }: PostulanteLayout
     <div className="min-h-screen bg-canvas">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-white/90 px-4 backdrop-blur sm:px-6">
         <button className="lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Abrir menú">
-          <Menu className="h-5 w-5 text-slate-500" />
+          <Menu className="h-5 w-5 text-ink-mute" />
         </button>
         <Logo size={30} withWordmark />
         <nav className="ml-6 hidden items-center gap-1 lg:flex">
@@ -45,7 +45,7 @@ export default function PostulanteLayout({ children, section }: PostulanteLayout
                 key={item.id}
                 onClick={() => onNavigate('postulante', item.id)}
                 className={`flex items-center gap-2 rounded-md px-2.5 py-[7px] text-[13px] font-medium transition-colors ${
-                  active ? 'bg-brand-50 font-semibold text-brand-800' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                  active ? 'bg-brand-50 font-semibold text-brand-800' : 'text-ink-mute hover:bg-band hover:text-ink'
                 }`}
               >
                 <item.icon className="h-4 w-4" strokeWidth={1.75} />
@@ -57,19 +57,19 @@ export default function PostulanteLayout({ children, section }: PostulanteLayout
         <div className="ml-auto flex items-center gap-3">
           <button
             onClick={() => onNavigate('postulante', 'p-notificaciones')}
-            className="relative rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            className="relative rounded-md p-2 text-ink-mute transition-colors hover:bg-band hover:text-ink"
             aria-label="Notificaciones"
           >
             <Bell className="h-5 w-5" />
-            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-rust-500" />
+            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
           </button>
-          <div className="flex items-center gap-2 rounded-md py-1 pl-1 pr-2 transition-colors hover:bg-slate-100">
+          <div className="flex items-center gap-2 rounded-md py-1 pl-1 pr-2 transition-colors hover:bg-band">
             <div className="flex h-7 w-7 items-center justify-center rounded-md bg-brand-700 text-[11px] font-semibold text-white">RA</div>
             <div className="hidden text-left sm:block">
-              <p className="text-[12.5px] font-medium leading-tight text-slate-900">Rodrigo Almirón</p>
-              <p className="text-[11px] text-slate-400">Postulante</p>
+              <p className="text-[12.5px] font-medium leading-tight text-ink">Rodrigo Almirón</p>
+              <p className="text-[11px] text-ink-faint">Postulante</p>
             </div>
-            <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+            <ChevronDown className="h-3.5 w-3.5 text-ink-faint" />
           </div>
         </div>
       </header>
@@ -77,12 +77,12 @@ export default function PostulanteLayout({ children, section }: PostulanteLayout
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-slate-900/25" onClick={() => setMobileOpen(false)} />
+          <div className="absolute inset-0 bg-chrome/30" onClick={() => setMobileOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72 border-r border-line bg-white p-3 shadow-pop">
             <div className="mb-4 flex items-center justify-between">
               <Logo size={32} withWordmark />
               <button onClick={() => setMobileOpen(false)} aria-label="Cerrar menú">
-                <X className="h-5 w-5 text-slate-400" />
+                <X className="h-5 w-5 text-ink-faint" />
               </button>
             </div>
             <nav className="flex flex-col gap-0.5">
@@ -124,7 +124,7 @@ export default function PostulanteLayout({ children, section }: PostulanteLayout
               key={item.id}
               onClick={() => onNavigate('postulante', item.id)}
               className={`flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-[10px] font-medium ${
-                active ? 'text-brand-700' : 'text-slate-400'
+                active ? 'text-brand-700' : 'text-ink-faint'
               }`}
             >
               <item.icon className="h-5 w-5" />

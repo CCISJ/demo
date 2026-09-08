@@ -8,13 +8,51 @@ export default {
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
-        // Fondo de la aplicación. Apenas más oscuro que el blanco de las
-        // superficies: alcanza para que una tarjeta se lea sin sombra.
-        canvas: '#f4f5f7',
+        // Fondo de la aplicación. Lleva un punto de verde y es lo bastante
+        // oscuro como para que una superficie blanca se lea sin sombra: la
+        // profundidad la dan los planos, no el sombreado.
+        canvas: '#edefec',
+        // Superficie: el blanco donde vive el contenido.
+        surface: '#ffffff',
+        // Banda de sección — el encabezado de cada tarjeta y de cada tabla.
+        // Es el plano que faltaba cuando todo era blanco sobre blanco.
+        band: '#f4f6f3',
         // Una única hairline para todo el sistema — bordes, divisores,
         // separadores de tabla. Que sea siempre la misma es lo que hace que la
         // pantalla se vea ordenada.
-        line: '#e5e7ea',
+        line: '#dce0dc',
+        // Divisor interno, un paso más tenue que la hairline: separa filas
+        // dentro de una misma superficie sin trocearla.
+        hair: '#eff1ed',
+        // Borde de control (campos, botones secundarios): un poco más firme
+        // que la hairline para que el control se sienta accionable.
+        edge: '#c6ccc6',
+        // Chrome institucional: la navegación en verde profundo. Zonifica la
+        // pantalla de un vistazo y es lo que le da identidad al sistema.
+        chrome: {
+          DEFAULT: '#05331b',
+          active: '#0a4a28',
+          text: '#b2c6ba',
+          dim: '#7e9a88',
+          label: '#6c8c78',
+        },
+        // Escala de tinta sobre claro.
+        ink: {
+          DEFAULT: '#0b1f14',
+          body: '#35423b',
+          soft: '#4a5a51',
+          mute: '#6c7a72',
+          faint: '#94a19a',
+          ghost: '#b4beb7',
+        },
+        // Rojo institucional para la excepción: vencido, inactivo, negativo.
+        // Más apagado que un rojo de alerta web — no es un error de sistema,
+        // es una cuota sin pagar.
+        alert: {
+          DEFAULT: '#b3261e',
+          tint: '#fdf7f6',
+          edge: '#e3a9a3',
+        },
         // Institutional green — primary brand (CCISJ logo green)
         brand: {
           50: '#f2faf6',

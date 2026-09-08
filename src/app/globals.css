@@ -5,16 +5,21 @@
 /*
   Sistema visual del CCISJ.
 
-  Tres reglas que ordenan todo lo demás:
+  Cuatro reglas ordenan todo lo demás:
 
-  1. El color significa algo. El verde es identidad y acción primaria; el rojo
-     es una excepción que pide trabajo (deuda, vencimiento); el dorado marca lo
-     institucional (directivos). Todo lo demás — la enorme mayoría de la
-     pantalla — es neutro. Un estado normal ("Activo", "Al día") no se pinta:
-     si todo tiene color, el color deja de avisar.
-  2. La jerarquía la hace la tipografía y el espacio, no las cajas. Una sola
-     hairline separa; la sombra se reserva para lo que flota de verdad.
-  3. Los números se leen en columna: mono y tabulares, alineados a la derecha.
+  1. La profundidad la dan CUATRO PLANOS, no la sombra: chrome verde profundo
+     (navegación), lienzo, superficie blanca y banda teñida en cada encabezado
+     de sección. Cuando todo era blanco sobre blanco no se distinguía dónde
+     terminaba una zona y empezaba otra.
+  2. El color significa algo. El verde es identidad y acción primaria; el rojo
+     es una excepción que pide trabajo; el dorado marca lo institucional
+     (socio directivo, la regla sobre las cifras, la posición en el menú).
+     Todo lo demás es neutro: un estado normal ("Activo", "Al día") no se
+     pinta, porque si todo tiene color el color deja de avisar.
+  3. Cada pantalla tiene un ancla: la tira de cifras, con regla dorada arriba y
+     numerales grandes en mono tabular. Es lo primero que encuentra el ojo.
+  4. La excepción se detecta recorriendo el canto de la tabla: filete de 2 px
+     al borde izquierdo de la fila y fondo apenas teñido, sin pintar celdas.
 */
 
 @layer base {
@@ -26,12 +31,12 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    @apply bg-canvas font-sans text-[13.5px] leading-relaxed text-slate-700 antialiased;
+    @apply bg-canvas font-sans text-[13.5px] leading-relaxed text-ink-body antialiased;
   }
   h1,
   h2,
   h3 {
-    @apply text-slate-900;
+    @apply text-ink;
     letter-spacing: -0.011em;
   }
   /* Cifras siempre tabulares: las columnas de importes no bailan. */
@@ -62,34 +67,42 @@
   /* ---------- Superficies ---------- */
 
   .surface {
-    @apply rounded-lg border border-line bg-white;
+    @apply border border-line bg-surface;
   }
   .surface-hover {
-    @apply transition-colors duration-150 hover:border-slate-300;
+    @apply transition-colors duration-150 hover:border-edge;
   }
-  /* Encabezado interno de una superficie: título a la izquierda, acción a la
-     derecha, separado por la misma hairline que usan las filas. */
+  /* Encabezado de sección sobre banda teñida: es el plano que separa una
+     tarjeta de la siguiente sin necesidad de sombra. */
   .card-head {
-    @apply flex items-center justify-between gap-3 border-b border-line px-4 py-3;
+    @apply flex items-center justify-between gap-3 border-b border-line bg-band px-5 py-3;
   }
   .card-title {
-    @apply text-[13px] font-semibold text-slate-900;
+    @apply text-[10.5px] font-semibold uppercase tracking-[0.09em] text-ink-soft;
   }
-  /* Rótulo de sección. Es lo único que va en versalita: sirve para orientar
-     sin competir con el contenido. */
   .section-label {
-    @apply text-[11px] font-medium uppercase tracking-[0.07em] text-slate-400;
+    @apply text-[10.5px] font-semibold uppercase tracking-[0.09em] text-ink-faint;
+  }
+
+  /* ---------- Encabezado de página ---------- */
+
+  .page-head {
+    @apply flex flex-wrap items-end justify-between gap-x-5 gap-y-3 border-b-2 border-chrome pb-3.5;
+  }
+  .page-eyebrow {
+    @apply mb-1.5 text-[10.5px] font-semibold uppercase tracking-[0.09em] text-brand-600;
+  }
+  .page-title {
+    @apply text-[24px] font-semibold leading-tight tracking-[-0.022em] text-ink;
   }
 
   /* ---------- Estados ---------- */
 
-  /* Un estado es texto con un punto, no una píldora rellena. El punto lleva el
-     color; el texto se mantiene legible. */
   .status {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap text-[13px] text-slate-600;
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap text-[13px] text-ink-mute;
   }
-  /* El punto se reserva a la línea que corresponde. En el estado normal queda
-     transparente: no se ve, pero mantiene la columna alineada. */
+  /* El punto queda transparente en el estado normal: no se ve, pero mantiene
+     la columna alineada. */
   .status::before {
     content: '';
     @apply h-1.5 w-1.5 shrink-0 rounded-full bg-transparent;
@@ -98,27 +111,27 @@
     @apply bg-brand-500;
   }
   .status-alert {
-    @apply font-medium text-rust-700;
+    @apply font-semibold text-alert;
   }
   .status-alert::before {
-    @apply bg-rust-500;
+    @apply bg-alert;
   }
   .status-warn {
-    @apply text-sol-700;
+    @apply text-gold-800;
   }
   .status-warn::before {
-    @apply bg-sol-500;
+    @apply bg-gold-500;
   }
   .status-muted {
-    @apply text-slate-400;
+    @apply text-ink-faint;
   }
   .status-muted::before {
-    @apply bg-slate-400;
+    @apply bg-ink-ghost;
   }
 
   /* Etiqueta de categoría: contorno tenue, sin relleno de color. */
   .chip {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border border-line px-2 py-0.5 text-[12px] font-medium text-slate-600;
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap border border-line px-2 py-0.5 text-[11.5px] font-medium text-ink-mute;
   }
   .chip-brand {
     @apply border-brand-200 text-brand-800;
@@ -127,98 +140,116 @@
     @apply border-gold-300 text-gold-800;
   }
   .chip-alert {
-    @apply border-rust-200 text-rust-700;
+    @apply border-alert-edge font-semibold text-alert;
   }
 
-  /* ---------- Navegación ---------- */
+  /* ---------- Navegación (sobre el chrome) ---------- */
 
   .nav-item {
-    @apply flex w-full items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900;
+    @apply flex w-full items-center gap-2.5 px-2.5 py-2 text-left text-[13px] text-chrome-text transition-colors hover:bg-chrome-active hover:text-white;
   }
-  /* El activo se marca con peso y fondo, no con anillo de color. */
+  /* El activo se levanta un plano y lleva filete dorado. */
   .nav-item-active {
-    @apply bg-brand-50 font-semibold text-brand-800 hover:bg-brand-50 hover:text-brand-800;
+    @apply border-l-2 border-gold-500 bg-chrome-active pl-2 font-semibold text-white;
+  }
+  .nav-group {
+    @apply mb-1.5 px-2.5 text-[10.5px] font-semibold uppercase tracking-[0.09em] text-chrome-label;
   }
   .nav-count {
-    @apply ml-auto text-[11px] font-semibold tabular-nums text-slate-400;
+    @apply ml-auto text-[11px] font-semibold tabular-nums text-chrome-dim;
   }
 
   /* ---------- Botones ---------- */
 
   .btn {
-    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-md px-3 py-[7px] text-[13px] font-medium transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-1;
+    @apply inline-flex select-none items-center justify-center gap-2 px-3.5 py-2 text-[12.5px] font-medium transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1;
   }
   .btn-primary {
-    @apply btn bg-brand-700 font-semibold text-white hover:bg-brand-800;
+    @apply btn bg-brand-700 font-semibold text-white hover:bg-chrome;
   }
   .btn-outline {
-    @apply btn border border-line bg-white text-slate-700 hover:bg-slate-50;
+    @apply btn border border-edge bg-surface text-ink-body hover:bg-band;
   }
   .btn-ghost {
-    @apply btn text-slate-500 hover:bg-slate-100 hover:text-slate-900;
+    @apply btn text-ink-mute hover:bg-band hover:text-ink;
   }
-  /* Se mantiene por compatibilidad, pero el dorado no es un botón de acción:
-     es una marca institucional. */
   .btn-gold {
-    @apply btn border border-gold-300 bg-white text-gold-800 hover:bg-gold-50;
+    @apply btn border border-gold-300 bg-surface text-gold-800 hover:bg-gold-50;
   }
   .btn-link {
-    @apply text-[12.5px] font-semibold text-brand-700 transition-colors hover:text-brand-900;
+    @apply text-[12px] font-semibold text-brand-700 transition-colors hover:text-chrome;
   }
 
   /* ---------- Formularios ---------- */
 
   .input {
-    @apply w-full rounded-md border border-line bg-white px-3 py-[7px] text-[13px] text-slate-800 transition-colors placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500;
+    @apply w-full border border-edge bg-surface px-3 py-2 text-[13px] text-ink transition-colors placeholder:text-ink-faint focus:border-brand-600 focus:outline-none focus:ring-1 focus:ring-brand-600;
   }
   .label {
-    @apply mb-1 block text-[12.5px] font-medium text-slate-600;
+    @apply mb-1.5 block text-[12.5px] font-medium text-ink-soft;
   }
-  /* Filtro segmentado: un solo control, sin diez píldoras sueltas. */
   .segment {
-    @apply inline-flex items-center rounded-md border border-line bg-white p-0.5;
+    @apply inline-flex items-center border border-edge bg-surface;
   }
   .segment-item {
-    @apply rounded-[5px] px-2.5 py-1 text-[12.5px] font-medium text-slate-500 transition-colors hover:text-slate-900;
+    @apply px-3 py-1.5 text-[12.5px] font-medium text-ink-mute transition-colors hover:text-ink;
   }
   .segment-item-active {
-    @apply bg-slate-100 font-semibold text-slate-900 hover:text-slate-900;
+    @apply bg-chrome font-semibold text-white hover:text-white;
   }
 
   /* ---------- Tablas ---------- */
 
+  .table-head {
+    @apply border-b border-line bg-band;
+  }
   .table-th {
-    @apply whitespace-nowrap px-4 py-2 text-left text-[11px] font-medium uppercase tracking-[0.07em] text-slate-400;
+    @apply whitespace-nowrap px-4 py-2.5 text-left text-[10.5px] font-semibold uppercase tracking-[0.09em] text-ink-mute;
   }
   .table-td {
-    @apply px-4 py-2.5 text-[13px] text-slate-700;
+    @apply border-t border-hair px-4 py-2.5 text-[13px] text-ink-body;
   }
   .table-row {
-    @apply border-t border-line transition-colors hover:bg-slate-50;
+    @apply transition-colors hover:bg-band;
   }
-  /* Importes y cualquier columna numérica. */
   .table-num {
-    @apply table-td text-right font-mono text-[12.5px] tabular-nums text-slate-800;
+    @apply table-td text-right font-mono text-[12.5px] tabular-nums text-ink;
+  }
+  /* Fila de excepción: el filete al canto izquierdo se detecta recorriendo el
+     borde de la tabla. `row-flag` reserva el mismo ancho en las filas normales
+     para que el texto no se corra. */
+  .row-alert {
+    @apply bg-alert-tint;
+  }
+  .row-alert > td:first-child {
+    @apply border-l-2 border-l-alert;
+  }
+  .row-flag > td:first-child {
+    @apply border-l-2 border-l-transparent;
   }
 
   /* ---------- Cifras ---------- */
 
-  /* La tira de métricas reemplaza a las tarjetas con ícono de color: mismos
-     datos, una sola caja, sin ocho acentos compitiendo. */
+  /* El ancla de cada pantalla: regla dorada arriba y numerales grandes. */
   .metric-strip {
-    @apply grid divide-y divide-line overflow-hidden rounded-lg border border-line bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x;
+    @apply grid divide-y divide-line border border-line bg-surface sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x;
+    border-top: 2px solid theme('colors.gold.500');
   }
   .metric {
-    @apply px-4 py-3;
+    @apply px-5 py-4;
   }
   .metric-label {
-    @apply text-[12px] text-slate-500;
+    @apply text-[10.5px] font-semibold uppercase tracking-[0.09em] text-ink-faint;
   }
   .metric-value {
-    @apply mt-0.5 text-[22px] font-semibold leading-none tracking-tight text-slate-900;
+    @apply mt-2.5 text-[32px] font-semibold leading-none tracking-[-0.03em] text-ink;
     font-variant-numeric: tabular-nums;
   }
   .metric-note {
-    @apply mt-1.5 text-[12px] text-slate-400;
+    @apply mt-2 text-[12px] text-ink-faint;
+  }
+  /* Última celda de la tira: teñida, para cerrar el bloque. */
+  .metric-close {
+    @apply bg-band;
   }
 }
