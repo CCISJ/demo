@@ -18,21 +18,28 @@ export interface Socio {
   ultimoPago: string;
   categoria: string;
   adhesion: string;
+  /**
+   * Cargo mensual que ese socio le reintegra al Centro, ADEMÁS de la cuota.
+   * Es opcional e independiente para cada socio, y se puede editar en
+   * cualquier momento — a diferencia de la cuota, que se fija una vez al año
+   * y rige los doce meses. `undefined` significa que no tiene reintegro.
+   */
+  reintegro?: number;
 }
 
 export const socios: Socio[] = [
-  { id: 'S-1042', empresa: 'Distribuidora San José SRL', rut: '210458930012', tipo: 'directivo', contacto: 'Marta Echevarría', email: 'marta@distribuidorasj.com.uy', telefono: '099 452 310', estado: 'activo', pago: 'al-dia', ultimoPago: '12/08/2026', categoria: 'Comercio mayorista', adhesion: '03/2018' },
-  { id: 'S-1043', empresa: 'Frigorífico Río Negro SA', rut: '215678120015', tipo: 'directivo', contacto: 'Juan Carlos Pereyra', email: 'jcpereyra@frigorificorn.com.uy', telefono: '098 221 540', estado: 'activo', pago: 'al-dia', ultimoPago: '02/08/2026', categoria: 'Industria frigorífica', adhesion: '11/2015' },
-  { id: 'S-1044', empresa: 'Farmacity San José', rut: '219843210021', tipo: 'comun', contacto: 'Lucía Fernández', email: 'lucia@farmacitysj.com.uy', telefono: '091 778 120', estado: 'activo', pago: 'deudor', ultimoPago: '15/06/2026', categoria: 'Farmacia', adhesion: '07/2021' },
+  { id: 'S-1042', empresa: 'Distribuidora San José SRL', rut: '210458930012', tipo: 'directivo', contacto: 'Marta Echevarría', email: 'marta@distribuidorasj.com.uy', telefono: '099 452 310', estado: 'activo', pago: 'al-dia', ultimoPago: '12/08/2026', categoria: 'Comercio mayorista', adhesion: '03/2018', reintegro: 1800 },
+  { id: 'S-1043', empresa: 'Frigorífico Río Negro SA', rut: '215678120015', tipo: 'directivo', contacto: 'Juan Carlos Pereyra', email: 'jcpereyra@frigorificorn.com.uy', telefono: '098 221 540', estado: 'activo', pago: 'al-dia', ultimoPago: '02/08/2026', categoria: 'Industria frigorífica', adhesion: '11/2015', reintegro: 2400 },
+  { id: 'S-1044', empresa: 'Farmacity San José', rut: '219843210021', tipo: 'comun', contacto: 'Lucía Fernández', email: 'lucia@farmacitysj.com.uy', telefono: '091 778 120', estado: 'activo', pago: 'deudor', ultimoPago: '15/06/2026', categoria: 'Farmacia', adhesion: '07/2021', reintegro: 950 },
   { id: 'S-1045', empresa: 'Transportes del Sur', rut: '213245780018', tipo: 'comun', contacto: 'Diego Martínez', email: 'diego@transportessur.com.uy', telefono: '099 654 220', estado: 'inactivo', pago: 'deudor', ultimoPago: '20/03/2026', categoria: 'Logística y transporte', adhesion: '02/2019' },
   { id: 'S-1046', empresa: 'Tecnología MóvilUY', rut: '218765430011', tipo: 'comun', contacto: 'Carolina Sosa', email: 'carolina@moviluy.com.uy', telefono: '098 112 330', estado: 'activo', pago: 'al-dia', ultimoPago: '10/08/2026', categoria: 'Tecnología', adhesion: '09/2022' },
   { id: 'S-1047', empresa: 'Panadería La Esquina', rut: '211234560014', tipo: 'comun', contacto: 'Raúl Giménez', email: 'raul@panaderialaesquina.com.uy', telefono: '099 887 410', estado: 'activo', pago: 'al-dia', ultimoPago: '08/08/2026', categoria: 'Alimentación', adhesion: '04/2017' },
-  { id: 'S-1048', empresa: 'Estudio Contable Pereira & Asoc.', rut: '214567890019', tipo: 'directivo', contacto: 'Ana Pereira', email: 'ana@estudiopereira.com.uy', telefono: '092 334 550', estado: 'activo', pago: 'al-dia', ultimoPago: '14/08/2026', categoria: 'Servicios profesionales', adhesion: '01/2014' },
+  { id: 'S-1048', empresa: 'Estudio Contable Pereira & Asoc.', rut: '214567890019', tipo: 'directivo', contacto: 'Ana Pereira', email: 'ana@estudiopereira.com.uy', telefono: '092 334 550', estado: 'activo', pago: 'al-dia', ultimoPago: '14/08/2026', categoria: 'Servicios profesionales', adhesion: '01/2014', reintegro: 1200 },
   { id: 'S-1049', empresa: 'Ferretería El Tornillo', rut: '217654320013', tipo: 'comun', contacto: 'Pedro Vázquez', email: 'pedro@eltornillo.com.uy', telefono: '099 221 880', estado: 'activo', pago: 'deudor', ultimoPago: '28/05/2026', categoria: 'Ferretería', adhesion: '06/2020' },
-  { id: 'S-1050', empresa: 'Hotel Ciudad Vieja', rut: '216789540012', tipo: 'comun', contacto: 'Sandra Ríos', email: 'sandra@hotelcv.com.uy', telefono: '098 556 770', estado: 'activo', pago: 'al-dia', ultimoPago: '11/08/2026', categoria: 'Hotelería y turismo', adhesion: '03/2016' },
+  { id: 'S-1050', empresa: 'Hotel Ciudad Vieja', rut: '216789540012', tipo: 'comun', contacto: 'Sandra Ríos', email: 'sandra@hotelcv.com.uy', telefono: '098 556 770', estado: 'activo', pago: 'al-dia', ultimoPago: '11/08/2026', categoria: 'Hotelería y turismo', adhesion: '03/2016', reintegro: 3100 },
   { id: 'S-1051', empresa: 'Agroinsumos del Sur', rut: '213987650017', tipo: 'comun', contacto: 'Fernando Larrosa', email: 'fernando@agroinsumos.com.uy', telefono: '099 344 120', estado: 'inactivo', pago: 'deudor', ultimoPago: '10/02/2026', categoria: 'Agroinsumos', adhesion: '08/2018' },
   { id: 'S-1052', empresa: 'Librería y Papelera Centro', rut: '212345670016', tipo: 'comun', contacto: 'Beatriz Acosta', email: 'bea@libreriacentro.com.uy', telefono: '091 220 990', estado: 'activo', pago: 'al-dia', ultimoPago: '09/08/2026', categoria: 'Librería', adhesion: '05/2019' },
-  { id: 'S-1053', empresa: 'Constructora San José', rut: '215432100018', tipo: 'directivo', contacto: 'Marcelo Domínguez', email: 'marcelo@constructorasj.com.uy', telefono: '098 776 100', estado: 'activo', pago: 'al-dia', ultimoPago: '13/08/2026', categoria: 'Construcción', adhesion: '02/2013' },
+  { id: 'S-1053', empresa: 'Constructora San José', rut: '215432100018', tipo: 'directivo', contacto: 'Marcelo Domínguez', email: 'marcelo@constructorasj.com.uy', telefono: '098 776 100', estado: 'activo', pago: 'al-dia', ultimoPago: '13/08/2026', categoria: 'Construcción', adhesion: '02/2013', reintegro: 1500 },
 ];
 
 export type OfertaEstado = 'activa' | 'cerrada' | 'borrador';
@@ -197,11 +204,24 @@ export const gastosDelMes: GastoDelMes[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Reintegros a socios: el CCISJ indicó que cada socio tiene un valor de
-// reintegro distinto, pero todavía no se definieron los montos ni el
-// mecanismo de cálculo. Se deja como módulo pendiente hasta tener esa info
-// (ver tarjeta "En definición" en Configuración → Cuotas y costos).
+// Reintegros a socios: cada socio puede tener un reintegro propio que se SUMA
+// a lo que paga ese mes. Es opcional —no todos lo tienen— y editable en
+// cualquier momento desde la ficha del socio o desde Configuración.
+//
+// El total que abona un socio es entonces:
+//
+//     cuota vigente del año  +  gastos del mes  +  reintegro del socio
+//
+// Los dos primeros términos son iguales para todos; el tercero es lo único
+// que varía socio por socio.
 // ---------------------------------------------------------------------------
+
+/** Total mensual de un socio: cuota base + gastos del mes + su reintegro. */
+export const totalMensualSocio = (
+  socio: Pick<Socio, 'reintegro'>,
+  cuotaBase: number,
+  gastosMes: number,
+) => cuotaBase + gastosMes + (socio.reintegro ?? 0);
 
 export interface MovimientoCaja {
   id: string;
