@@ -31,7 +31,7 @@ export default function PostulantePostulaciones() {
     <div className="space-y-4">
       <PageHeader title="Mis postulaciones" subtitle="Estado de cada proceso" />
 
-      <p className="text-[12.5px] text-slate-500">
+      <p className="text-[12.5px] text-ink-mute">
         Cuando una empresa te selecciona, el CCISJ te contacta por teléfono. Si no continuás en el
         proceso, te avisamos acá y por correo.
       </p>
@@ -45,14 +45,14 @@ export default function PostulantePostulaciones() {
               onClick={() => setFilter(k)}
               className={`segment-item ${filter === k ? 'segment-item-active' : ''}`}
             >
-              {l} <span className="tabular-nums text-slate-400">{count}</span>
+              {l} <span className="tabular-nums text-ink-faint">{count}</span>
             </button>
           );
         })}
       </div>
 
       {filtered.length === 0 ? (
-        <div className="surface px-4 py-12 text-center text-[13px] text-slate-500">
+        <div className="surface px-4 py-12 text-center text-[13px] text-ink-mute">
           No tenés postulaciones en este estado.
         </div>
       ) : (
@@ -62,15 +62,15 @@ export default function PostulantePostulaciones() {
             return (
               <li key={p.id} className="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4">
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-semibold text-slate-900">{p.puesto}</p>
-                  <p className="mt-0.5 text-[12.5px] text-slate-500">{p.empresa}</p>
-                  <p className="mt-1 text-[12px] text-slate-400">
+                  <p className="text-[14px] font-semibold text-ink">{p.puesto}</p>
+                  <p className="mt-0.5 text-[12.5px] text-ink-mute">{p.empresa}</p>
+                  <p className="mt-1 text-[12px] text-ink-faint">
                     {p.categoria} · postulaste el {p.fecha}
                   </p>
                 </div>
                 <div className="shrink-0 sm:text-right">
                   <Status tone={cfg.tone}>{cfg.label}</Status>
-                  {cfg.nota && <p className="mt-0.5 text-[12px] text-slate-400">{cfg.nota}</p>}
+                  {cfg.nota && <p className="mt-0.5 text-[12px] text-ink-faint">{cfg.nota}</p>}
                 </div>
               </li>
             );

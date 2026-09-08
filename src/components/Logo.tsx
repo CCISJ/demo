@@ -14,7 +14,7 @@ interface LogoProps {
 // generated wordmark instead.
 export default function Logo({ size = 40, withWordmark = false, className = '', variant = 'dark' }: LogoProps) {
   const wordColor = variant === 'light' ? 'text-white' : 'text-brand-900';
-  const subColor = variant === 'light' ? 'text-brand-100' : 'text-slate-500';
+  const subColor = variant === 'light' ? 'text-brand-100' : 'text-ink-mute';
 
   if (withWordmark && variant === 'dark') {
     return (

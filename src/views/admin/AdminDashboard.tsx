@@ -100,10 +100,10 @@ export default function AdminDashboard() {
           <button
             key={a.label}
             onClick={() => onNavigate("admin", a.target)}
-            className="group flex flex-1 items-center gap-2 px-4 py-3 text-[13px] font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="group flex flex-1 items-center gap-2 px-4 py-3 text-[13px] font-medium text-ink-body transition-colors hover:bg-band hover:text-ink"
           >
             <a.icon
-              className="h-4 w-4 text-slate-400 transition-colors group-hover:text-brand-700"
+              className="h-4 w-4 text-ink-faint transition-colors group-hover:text-brand-700"
               strokeWidth={1.75}
             />
             <span className="whitespace-nowrap">{a.label}</span>
@@ -131,17 +131,17 @@ export default function AdminDashboard() {
                   className="border-t border-line first:border-t-0"
                 >
                   <td className="table-td">
-                    <p className="truncate font-medium text-slate-900">
+                    <p className="truncate font-medium text-ink">
                       {m.concepto}
                     </p>
-                    <p className="mt-0.5 text-[12px] text-slate-400">
+                    <p className="mt-0.5 text-[12px] text-ink-faint">
                       {m.fecha} · {m.cuenta}
                     </p>
                   </td>
                   {/* El signo y el color solo distinguen entrada de salida: es
                       la única lectura que el ojo necesita en esta columna. */}
                   <td
-                    className={`table-num ${m.tipo === "ingreso" ? "text-slate-900" : "text-rust-700"}`}
+                    className={`table-num ${m.tipo === "ingreso" ? "text-ink" : "text-alert"}`}
                   >
                     {m.tipo === "ingreso" ? "+" : "−"}
                     {formatPesos(m.monto)}
@@ -161,24 +161,24 @@ export default function AdminDashboard() {
             <div className="px-4 py-3">
               <dl className="space-y-2">
                 <div className="flex items-baseline justify-between gap-3">
-                  <dt className="text-[13px] text-slate-500">Ingresos</dt>
-                  <dd className="font-mono text-[13px] tabular-nums text-slate-900">
+                  <dt className="text-[13px] text-ink-mute">Ingresos</dt>
+                  <dd className="font-mono text-[13px] tabular-nums text-ink">
                     {formatPesos(ingresosMes)}
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3">
-                  <dt className="text-[13px] text-slate-500">Egresos</dt>
-                  <dd className="font-mono text-[13px] tabular-nums text-slate-900">
+                  <dt className="text-[13px] text-ink-mute">Egresos</dt>
+                  <dd className="font-mono text-[13px] tabular-nums text-ink">
                     {formatPesos(egresosMes)}
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3 border-t border-line pt-2">
-                  <dt className="text-[13px] font-medium text-slate-900">
+                  <dt className="text-[13px] font-medium text-ink">
                     Saldo
                   </dt>
                   <dd
                     className={`font-mono text-[15px] font-medium tabular-nums ${
-                      saldo < 0 ? "text-rust-700" : "text-slate-900"
+                      saldo < 0 ? "text-alert" : "text-ink"
                     }`}
                   >
                     {formatPesos(saldo)}
@@ -196,8 +196,8 @@ export default function AdminDashboard() {
             <ul className="divide-y divide-line">
               <li className="flex items-start justify-between gap-3 px-4 py-3">
                 <div>
-                  <p className="text-[13px] text-slate-700">Cuotas vencidas</p>
-                  <p className="mt-0.5 text-[12px] text-slate-400">
+                  <p className="text-[13px] text-ink-body">Cuotas vencidas</p>
+                  <p className="mt-0.5 text-[12px] text-ink-faint">
                     Requiere gestión de cobranza
                   </p>
                 </div>
@@ -210,11 +210,11 @@ export default function AdminDashboard() {
               </li>
               <li className="flex items-start justify-between gap-3 px-4 py-3">
                 <div>
-                  <p className="text-[13px] text-slate-700">
-                    Facturas sin emitir
+                  <p className="text-[13px] text-ink-body">
+                    Facturas impagas
                   </p>
-                  <p className="mt-0.5 text-[12px] text-slate-400">
-                    FEU del mes en curso
+                  <p className="mt-0.5 text-[12px] text-ink-faint">
+                    FEU emitidas sin cobrar
                   </p>
                 </div>
                 <button
@@ -233,7 +233,7 @@ export default function AdminDashboard() {
       <div className="surface">
         <div className="card-head">
           <h2 className="card-title">Próximas actividades</h2>
-          <span className="text-[12px] text-slate-400">
+          <span className="text-[12px] text-ink-faint">
             {actividades.length} programadas
           </span>
         </div>
@@ -241,20 +241,20 @@ export default function AdminDashboard() {
           {actividades.map((a) => (
             <li key={a.id} className="flex items-center gap-3 px-4 py-2.5">
               <div className="w-11 shrink-0 border-r border-line pr-3 text-center">
-                <p className="font-mono text-[15px] font-medium leading-none tabular-nums text-slate-900">
+                <p className="font-mono text-[15px] font-medium leading-none tabular-nums text-ink">
                   {a.fecha.split("/")[0]}
                 </p>
-                <p className="mt-1 text-[10px] uppercase tracking-wide text-slate-400">
+                <p className="mt-1 text-[10px] uppercase tracking-wide text-ink-faint">
                   {mesCorto(a.fecha)}
                 </p>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-medium text-slate-900">
+                <p className="truncate text-[13px] font-medium text-ink">
                   {a.titulo}
                 </p>
-                <p className="text-[12px] text-slate-400">{a.tipo}</p>
+                <p className="text-[12px] text-ink-faint">{a.tipo}</p>
               </div>
-              <p className="shrink-0 font-mono text-[12.5px] tabular-nums text-slate-500">
+              <p className="shrink-0 font-mono text-[12.5px] tabular-nums text-ink-mute">
                 {a.inscritos}/{a.cupos}
               </p>
             </li>

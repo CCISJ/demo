@@ -48,13 +48,13 @@ export default function PostulanteCV() {
       <div className="surface flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
         <div className="w-full max-w-sm">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="text-[13px] font-medium text-slate-900">Perfil completado</p>
-            <p className="font-mono text-[13px] tabular-nums text-slate-900">75%</p>
+            <p className="text-[13px] font-medium text-ink">Perfil completado</p>
+            <p className="font-mono text-[13px] tabular-nums text-ink">75%</p>
           </div>
-          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-band">
             <div className="h-full rounded-full bg-brand-600" style={{ width: '75%' }} />
           </div>
-          <p className="mt-1.5 text-[12px] text-slate-400">Falta completar educación y cursos.</p>
+          <p className="mt-1.5 text-[12px] text-ink-faint">Falta completar educación y cursos.</p>
         </div>
 
         <button className="btn-outline shrink-0">
@@ -73,8 +73,8 @@ export default function PostulanteCV() {
               onClick={() => setTab(t.id)}
               className={`shrink-0 border-b-2 px-2.5 py-2.5 text-[13px] font-medium transition-colors ${
                 tab === t.id
-                  ? 'border-brand-700 text-slate-900'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-brand-700 text-ink'
+                  : 'border-transparent text-ink-mute hover:text-ink'
               }`}
             >
               {t.label}
@@ -94,7 +94,7 @@ export default function PostulanteCV() {
           {tab === 'categorias' && (
             <div>
               <h3 className="card-title">¿En qué áreas te gustaría trabajar?</h3>
-              <p className="mt-1 text-sm text-slate-500">Seleccioná las categorías laborales de tu interés. Te notificaremos cuando haya ofertas nuevas.</p>
+              <p className="mt-1 text-sm text-ink-mute">Seleccioná las categorías laborales de tu interés. Te notificaremos cuando haya ofertas nuevas.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {categoriasLaborales.map((c) => {
                   const active = categoriasSel.includes(c);
@@ -105,7 +105,7 @@ export default function PostulanteCV() {
                       className={`flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[13px] font-medium transition-colors ${
                         active
                           ? 'border-brand-700 bg-brand-50 text-brand-800'
-                          : 'border-line bg-white text-slate-600 hover:bg-slate-50'
+                          : 'border-line bg-surface text-ink-mute hover:bg-band'
                       }`}
                     >
                       {active && <Check className="h-3.5 w-3.5" strokeWidth={2} />}
@@ -114,7 +114,7 @@ export default function PostulanteCV() {
                   );
                 })}
               </div>
-              <p className="mt-4 text-xs text-slate-400">{categoriasSel.length} categorías seleccionadas</p>
+              <p className="mt-4 text-xs text-ink-faint">{categoriasSel.length} categorías seleccionadas</p>
             </div>
           )}
         </div>
@@ -140,9 +140,9 @@ function DatosPersonales() {
         <div><label className="label">Nombre completo</label><input className="input" defaultValue="Rodrigo Almirón" /></div>
         <div><label className="label">Documento de identidad</label><input className="input" defaultValue="1.234.567-8" /></div>
         <div><label className="label">Fecha de nacimiento</label><input type="date" className="input" defaultValue="1992-03-15" /></div>
-        <div><label className="label">Teléfono</label><div className="relative"><Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><input className="input pl-9" defaultValue="099 452 310" /></div></div>
-        <div><label className="label">Email</label><div className="relative"><Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><input className="input pl-9" defaultValue="rodrigo.almiron@gmail.com" /></div></div>
-        <div><label className="label">Ciudad</label><div className="relative"><MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><input className="input pl-9" defaultValue="San José de Mayo" /></div></div>
+        <div><label className="label">Teléfono</label><div className="relative"><Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" /><input className="input pl-9" defaultValue="099 452 310" /></div></div>
+        <div><label className="label">Email</label><div className="relative"><Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" /><input className="input pl-9" defaultValue="rodrigo.almiron@gmail.com" /></div></div>
+        <div><label className="label">Ciudad</label><div className="relative"><MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" /><input className="input pl-9" defaultValue="San José de Mayo" /></div></div>
         <div><label className="label">Licencia de conducir</label><input className="input" defaultValue="C4 (profesional)" /></div>
         <div><label className="label">Movilidad propia</label><select className="input"><option>Sí</option><option>No</option></select></div>
       </div>
@@ -157,7 +157,7 @@ function Presentacion() {
       <SectionHeader title="Presentación profesional" />
       <label className="label">Resumen profesional</label>
       <textarea rows={5} className="input resize-none" defaultValue="Chofer profesional con licencia C4 y más de 8 años de experiencia en recorridos de larga distancia. Experiencia en carga y descarga, control de documentación y mantenimiento básico de unidades. Responsable, puntual y con buena disposición." />
-      <p className="mt-2 text-xs text-slate-400">Máximo 500 caracteres · 248 usados</p>
+      <p className="mt-2 text-xs text-ink-faint">Máximo 500 caracteres · 248 usados</p>
       <div className="mt-5 flex justify-end"><button className="btn-primary">Guardar</button></div>
     </div>
   );
@@ -173,21 +173,21 @@ function Experiencia() {
       <SectionHeader title="Experiencia laboral" action={<button className="btn-outline text-xs"><Plus className="h-3.5 w-3.5" /> Agregar</button>} />
       <div className="space-y-3">
         {items.map((e, i) => (
-          <div key={i} className="rounded-xl border border-slate-200 p-4">
+          <div key={i} className="rounded-xl border border-line p-4">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
                 <div>
-                  <p className="font-medium text-slate-900">{e.puesto}</p>
-                  <p className="text-sm text-slate-500">{e.empresa}</p>
-                  <p className="mt-0.5 text-xs text-slate-400">{e.desde} — {e.hasta}</p>
+                  <p className="font-medium text-ink">{e.puesto}</p>
+                  <p className="text-sm text-ink-mute">{e.empresa}</p>
+                  <p className="mt-0.5 text-xs text-ink-faint">{e.desde} — {e.hasta}</p>
                 </div>
               </div>
               <div className="flex gap-1">
-                <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-brand-700"><Pencil className="h-4 w-4" /></button>
-                <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rust-600"><Trash2 className="h-4 w-4" /></button>
+                <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-brand-700"><Pencil className="h-4 w-4" /></button>
+                <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-alert"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>
-            <p className="mt-2 text-sm text-slate-600">{e.desc}</p>
+            <p className="mt-2 text-sm text-ink-mute">{e.desc}</p>
           </div>
         ))}
       </div>
@@ -200,18 +200,18 @@ function Educacion() {
     <div>
       <SectionHeader title="Educación" action={<button className="btn-outline text-xs"><Plus className="h-3.5 w-3.5" /> Agregar</button>} />
       <div className="space-y-3">
-        <div className="rounded-xl border border-slate-200 p-4">
+        <div className="rounded-xl border border-line p-4">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
               <div>
-                <p className="font-medium text-slate-900">Bachillerato completo</p>
-                <p className="text-sm text-slate-500">Liceo N°1 San José</p>
-                <p className="text-xs text-slate-400">2007 — 2012</p>
+                <p className="font-medium text-ink">Bachillerato completo</p>
+                <p className="text-sm text-ink-mute">Liceo N°1 San José</p>
+                <p className="text-xs text-ink-faint">2007 — 2012</p>
               </div>
             </div>
             <div className="flex gap-1">
-              <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-brand-700"><Pencil className="h-4 w-4" /></button>
-              <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rust-600"><Trash2 className="h-4 w-4" /></button>
+              <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-brand-700"><Pencil className="h-4 w-4" /></button>
+              <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-alert"><Trash2 className="h-4 w-4" /></button>
             </div>
           </div>
         </div>
@@ -229,12 +229,12 @@ function Cursos() {
           { nombre: 'Curso de conducción defensiva', ente: 'Cámara del Transporte', anio: '2023' },
           { nombre: 'Manipulación de cargas', ente: 'BPS — SUNCA', anio: '2021' },
         ].map((c, i) => (
-          <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 p-4">
+          <div key={i} className="flex items-center gap-3 rounded-xl border border-line p-4">
             <div className="flex-1">
-              <p className="font-medium text-slate-900">{c.nombre}</p>
-              <p className="text-xs text-slate-400">{c.ente} · {c.anio}</p>
+              <p className="font-medium text-ink">{c.nombre}</p>
+              <p className="text-xs text-ink-faint">{c.ente} · {c.anio}</p>
             </div>
-            <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rust-600"><Trash2 className="h-4 w-4" /></button>
+            <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-alert"><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
       </div>
@@ -256,7 +256,7 @@ function Habilidades() {
         {skills.map((s) => (
           <span key={s} className="inline-flex items-center gap-1.5 rounded-xl bg-brand-50 px-3 py-2 text-sm font-medium text-brand-700 ring-1 ring-brand-100">
             {s}
-            <button onClick={() => setSkills(skills.filter((x) => x !== s))} className="text-brand-400 hover:text-rust-500"><X className="h-3.5 w-3.5" /></button>
+            <button onClick={() => setSkills(skills.filter((x) => x !== s))} className="text-brand-400 hover:text-alert"><X className="h-3.5 w-3.5" /></button>
           </span>
         ))}
       </div>
@@ -274,13 +274,13 @@ function Certificados() {
           { nombre: 'Carnet de salud 2026.pdf', fecha: '2026' },
           { nombre: 'Certificado antecedentes.pdf', fecha: '2026' },
         ].map((c, i) => (
-          <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+          <div key={i} className="flex items-center gap-3 rounded-xl border border-line p-3">
             <div className="flex-1">
-              <p className="text-[13px] text-slate-800">{c.nombre}</p>
-              <p className="text-xs text-slate-400">Subido en {c.fecha}</p>
+              <p className="text-[13px] text-ink-body">{c.nombre}</p>
+              <p className="text-xs text-ink-faint">Subido en {c.fecha}</p>
             </div>
-            <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100"><Download className="h-4 w-4" /></button>
-            <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rust-600"><Trash2 className="h-4 w-4" /></button>
+            <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band"><Download className="h-4 w-4" /></button>
+            <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-alert"><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
       </div>
@@ -297,14 +297,14 @@ function Referencias() {
           { nombre: 'Carlos Méndez', cargo: 'Jefe de flota — Transportes del Sur', telefono: '099 654 220' },
           { nombre: 'Ana Pereira', cargo: 'Contadora — Estudio Pereira', telefono: '092 334 550' },
         ].map((r, i) => (
-          <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 p-4">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-500"><Phone className="h-5 w-5" /></span>
+          <div key={i} className="flex items-center gap-3 rounded-xl border border-line p-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-band text-ink-mute"><Phone className="h-5 w-5" /></span>
             <div className="flex-1">
-              <p className="font-medium text-slate-900">{r.nombre}</p>
-              <p className="text-xs text-slate-500">{r.cargo}</p>
-              <p className="text-xs text-slate-400">{r.telefono}</p>
+              <p className="font-medium text-ink">{r.nombre}</p>
+              <p className="text-xs text-ink-mute">{r.cargo}</p>
+              <p className="text-xs text-ink-faint">{r.telefono}</p>
             </div>
-            <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rust-600"><Trash2 className="h-4 w-4" /></button>
+            <button className="rounded-lg p-1.5 text-ink-faint hover:bg-band hover:text-alert"><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
       </div>

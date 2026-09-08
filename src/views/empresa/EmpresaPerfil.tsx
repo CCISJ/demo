@@ -27,7 +27,7 @@ export default function EmpresaPerfil() {
           <div className="card-head">
             <div>
               <h2 className="card-title">Distribuidora San José SRL</h2>
-              <p className="mt-0.5 text-[12px] text-slate-400">Socio directivo · Cuota al día</p>
+              <p className="mt-0.5 text-[12px] text-ink-faint">Socio directivo · Cuota al día</p>
             </div>
             <button className="btn-primary">Guardar cambios</button>
           </div>

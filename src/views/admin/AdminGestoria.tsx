@@ -33,7 +33,7 @@ export default function AdminGestoria() {
           <h2 className="card-title">Módulo en relevamiento</h2>
           <span className="chip">Sin habilitar</span>
         </div>
-        <p className="max-w-2xl px-4 py-3 text-[13px] leading-relaxed text-slate-600">
+        <p className="max-w-2xl px-4 py-3 text-[13px] leading-relaxed text-ink-mute">
           La gestoría del CCISJ está en proceso de relevamiento interno. El módulo se habilita
           una vez definidos los tipos de trámite, los circuitos de aprobación y los responsables
           de cada uno.
@@ -45,8 +45,8 @@ export default function AdminGestoria() {
         <div className="surface divide-y divide-line">
           {modulos.map((m) => (
             <div key={m.titulo} className="px-4 py-3">
-              <p className="text-[13px] font-medium text-slate-900">{m.titulo}</p>
-              <p className="mt-0.5 text-[12.5px] text-slate-500">{m.desc}</p>
+              <p className="text-[13px] font-medium text-ink">{m.titulo}</p>
+              <p className="mt-0.5 text-[12.5px] text-ink-mute">{m.desc}</p>
             </div>
           ))}
         </div>

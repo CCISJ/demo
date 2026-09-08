@@ -45,12 +45,12 @@ export default function EmpresaDashboard() {
       <div className="metric-strip">
         <div className="metric">
           <p className="metric-label">Condición</p>
-          <p className="mt-1 text-[15px] font-medium text-slate-900">Socio directivo</p>
+          <p className="mt-1 text-[15px] font-medium text-ink">Socio directivo</p>
           <p className="metric-note">Desde 03/2018</p>
         </div>
         <div className="metric">
           <p className="metric-label">Cuota</p>
-          <p className="mt-1 text-[15px] font-medium text-slate-900">Al día</p>
+          <p className="mt-1 text-[15px] font-medium text-ink">Al día</p>
           <p className="metric-note">Vence el 31/08/2026</p>
         </div>
         <div className="metric">
@@ -76,15 +76,15 @@ export default function EmpresaDashboard() {
             {listado.map((o) => (
               <li key={o.id} className="flex items-center gap-3 px-4 py-2.5">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-medium text-slate-900">{o.puesto}</p>
-                  <p className="text-[12px] text-slate-400">
+                  <p className="truncate text-[13px] font-medium text-ink">{o.puesto}</p>
+                  <p className="text-[12px] text-ink-faint">
                     {o.categoria} · cierra {o.cierra}
                   </p>
                 </div>
                 <Status tone={o.estado === 'activa' ? 'neutral' : 'muted'}>
                   {o.estado === 'activa' ? 'Activa' : 'Cerrada'}
                 </Status>
-                <p className="w-10 shrink-0 text-right font-mono text-[12.5px] tabular-nums text-slate-900">
+                <p className="w-10 shrink-0 text-right font-mono text-[12.5px] tabular-nums text-ink">
                   {o.candidatos}
                 </p>
               </li>
@@ -103,10 +103,10 @@ export default function EmpresaDashboard() {
             {novedades.map((n) => (
               <li key={n.t} className="px-4 py-2.5">
                 <div className="flex items-baseline justify-between gap-2">
-                  <p className="text-[13px] font-medium text-slate-900">{n.t}</p>
-                  <span className="shrink-0 whitespace-nowrap text-[12px] text-slate-400">{n.time}</span>
+                  <p className="text-[13px] font-medium text-ink">{n.t}</p>
+                  <span className="shrink-0 whitespace-nowrap text-[12px] text-ink-faint">{n.time}</span>
                 </div>
-                <p className="mt-0.5 text-[12.5px] text-slate-500">{n.d}</p>
+                <p className="mt-0.5 text-[12.5px] text-ink-mute">{n.d}</p>
               </li>
             ))}
           </ul>
@@ -118,10 +118,10 @@ export default function EmpresaDashboard() {
           <button
             key={a.title}
             onClick={() => onNavigate('empresa', a.target)}
-            className="flex-1 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+            className="flex-1 px-4 py-3 text-left transition-colors hover:bg-band"
           >
-            <p className="text-[13px] font-medium text-slate-900">{a.title}</p>
-            <p className="mt-0.5 text-[12px] text-slate-400">{a.desc}</p>
+            <p className="text-[13px] font-medium text-ink">{a.title}</p>
+            <p className="mt-0.5 text-[12px] text-ink-faint">{a.desc}</p>
           </button>
         ))}
       </div>

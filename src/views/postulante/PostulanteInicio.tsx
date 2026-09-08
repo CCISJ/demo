@@ -42,14 +42,14 @@ export default function PostulanteInicio() {
       <div className="surface flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <div className="w-full max-w-sm">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="text-[13px] font-medium text-slate-900">Perfil completado</p>
-            <p className="font-mono text-[13px] tabular-nums text-slate-900">75%</p>
+            <p className="text-[13px] font-medium text-ink">Perfil completado</p>
+            <p className="font-mono text-[13px] tabular-nums text-ink">75%</p>
           </div>
-          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-band">
             <div className="h-full rounded-full bg-brand-600" style={{ width: '75%' }} />
           </div>
         </div>
-        <p className="text-[12.5px] text-slate-500">
+        <p className="text-[12.5px] text-ink-mute">
           Completá tu CV para aparecer en más búsquedas.
         </p>
       </div>
@@ -80,8 +80,8 @@ export default function PostulanteInicio() {
           {postulaciones.slice(0, 3).map((p) => (
             <li key={p.id} className="flex items-center gap-3 px-4 py-2.5">
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-medium text-slate-900">{p.puesto}</p>
-                <p className="truncate text-[12px] text-slate-400">
+                <p className="truncate text-[13px] font-medium text-ink">{p.puesto}</p>
+                <p className="truncate text-[12px] text-ink-faint">
                   {p.empresa} · {p.fecha}
                 </p>
               </div>
@@ -94,17 +94,17 @@ export default function PostulanteInicio() {
       <div className="surface flex flex-wrap divide-line sm:divide-x">
         <button
           onClick={() => onNavigate('postulante', 'p-empleos')}
-          className="flex-1 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+          className="flex-1 px-4 py-3 text-left transition-colors hover:bg-band"
         >
-          <p className="text-[13px] font-medium text-slate-900">Encontrar empleo</p>
-          <p className="mt-0.5 text-[12px] text-slate-400">Explorá las ofertas activas</p>
+          <p className="text-[13px] font-medium text-ink">Encontrar empleo</p>
+          <p className="mt-0.5 text-[12px] text-ink-faint">Explorá las ofertas activas</p>
         </button>
         <button
           onClick={() => onNavigate('postulante', 'p-cv')}
-          className="flex-1 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+          className="flex-1 px-4 py-3 text-left transition-colors hover:bg-band"
         >
-          <p className="text-[13px] font-medium text-slate-900">Mi CV</p>
-          <p className="mt-0.5 text-[12px] text-slate-400">Completá tu perfil profesional</p>
+          <p className="text-[13px] font-medium text-ink">Mi CV</p>
+          <p className="mt-0.5 text-[12px] text-ink-faint">Completá tu perfil profesional</p>
         </button>
       </div>
     </div>

@@ -36,7 +36,7 @@ export default function EmpresaOfertas() {
 
       <div className="flex flex-col gap-2 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-faint" />
           <input
             className="input pl-8"
             placeholder="Buscar entre tus ofertas…"
@@ -56,7 +56,7 @@ export default function EmpresaOfertas() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[700px]">
             <thead>
-              <tr className="border-b border-line">
+              <tr className="table-head">
                 <th className="table-th">Oferta</th>
                 <th className="table-th">Categoría</th>
                 <th className="table-th">Publicada</th>
@@ -69,14 +69,14 @@ export default function EmpresaOfertas() {
               {filtered.map((o) => (
                 <tr key={o.id} className="table-row cursor-pointer">
                   <td className="table-td">
-                    <p className="font-medium text-slate-900">{o.puesto}</p>
-                    <p className="mt-0.5 line-clamp-1 text-[12px] text-slate-400">{o.descripcion}</p>
+                    <p className="font-medium text-ink">{o.puesto}</p>
+                    <p className="mt-0.5 line-clamp-1 text-[12px] text-ink-faint">{o.descripcion}</p>
                   </td>
                   <td className="table-td">
                     <span className="chip">{o.categoria}</span>
                   </td>
-                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-slate-500">{o.publicada}</td>
-                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-slate-500">{o.cierra}</td>
+                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-ink-mute">{o.publicada}</td>
+                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-ink-mute">{o.cierra}</td>
                   <td className="table-num">{o.candidatos}</td>
                   <td className="table-td">
                     <Status tone={estadoOferta[o.estado].tone}>{estadoOferta[o.estado].label}</Status>
@@ -88,7 +88,7 @@ export default function EmpresaOfertas() {
         </div>
 
         {filtered.length === 0 && (
-          <p className="px-4 py-12 text-center text-[13px] text-slate-500">
+          <p className="px-4 py-12 text-center text-[13px] text-ink-mute">
             No hay ofertas que coincidan con la búsqueda.
           </p>
         )}
@@ -102,13 +102,13 @@ export default function EmpresaOfertas() {
 function PublicarOfertaModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-900/25" onClick={onClose} />
-      <div className="animate-fade-in relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-line bg-white shadow-pop">
+      <div className="absolute inset-0 bg-chrome/30" onClick={onClose} />
+      <div className="animate-fade-in relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-pop">
         <div className="flex items-center justify-between border-b border-line px-5 py-4">
-          <h2 className="text-[15px] font-semibold text-slate-900">Publicar nueva oferta</h2>
+          <h2 className="text-[15px] font-semibold text-ink">Publicar nueva oferta</h2>
           <button
             onClick={onClose}
-            className="-mr-2 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="-mr-2 rounded-md p-2 text-ink-faint transition-colors hover:bg-band hover:text-ink-body"
             aria-label="Cerrar"
           >
             <X className="h-4 w-4" />

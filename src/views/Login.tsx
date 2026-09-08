@@ -54,8 +54,8 @@ export default function Login() {
             <Logo size={36} withWordmark />
           </div>
 
-          <h1 className="text-[20px] font-semibold tracking-tight text-slate-900">Iniciar sesión</h1>
-          <p className="mt-1 text-[13px] text-slate-500">Accedé con tu cuenta institucional.</p>
+          <h1 className="text-[20px] font-semibold tracking-tight text-ink">Iniciar sesión</h1>
+          <p className="mt-1 text-[13px] text-ink-mute">Accedé con tu cuenta institucional.</p>
 
           <div className="mt-6">
             <p className="section-label mb-1.5">Tipo de cuenta</p>
@@ -112,7 +112,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPass((s) => !s)}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 transition-colors hover:text-slate-700"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-1.5 text-ink-faint transition-colors hover:text-ink-body"
                   aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                 >
                   {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -120,10 +120,10 @@ export default function Login() {
               </div>
             </div>
 
-            <label className="flex items-center gap-2 text-[13px] text-slate-600">
+            <label className="flex items-center gap-2 text-[13px] text-ink-mute">
               <input
                 type="checkbox"
-                className="h-3.5 w-3.5 rounded border-slate-300 text-brand-600 focus:ring-brand-400"
+                className="h-3.5 w-3.5 rounded border-edge text-brand-600 focus:ring-brand-400"
                 defaultChecked
               />
               Recordarme en este dispositivo
@@ -135,11 +135,11 @@ export default function Login() {
           </form>
 
           <div className="mt-8 border-t border-line pt-5">
-            <p className="text-[13px] text-slate-600">¿Sos postulante y no tenés cuenta?</p>
+            <p className="text-[13px] text-ink-mute">¿Sos postulante y no tenés cuenta?</p>
             <button onClick={() => onNavigate('postulante', 'p-inicio')} className="btn-outline mt-2 w-full">
               Crear cuenta de postulante
             </button>
-            <p className="mt-3 text-[12px] leading-relaxed text-slate-400">
+            <p className="mt-3 text-[12px] leading-relaxed text-ink-faint">
               Las empresas no se registran libremente: sus usuarios los crea el CCISJ.
             </p>
           </div>

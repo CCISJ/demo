@@ -80,7 +80,7 @@ export default function AdminBolsa() {
         </div>
 
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-faint" />
           <input
             className="input pl-8"
             placeholder="Buscar oferta o empresa…"
@@ -103,7 +103,7 @@ export default function AdminBolsa() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[780px]">
             <thead>
-              <tr className="border-b border-line">
+              <tr className="table-head">
                 <th className="table-th">Oferta</th>
                 <th className="table-th">Empresa</th>
                 <th className="table-th">Categoría</th>
@@ -117,18 +117,18 @@ export default function AdminBolsa() {
               {filtered.map((o) => (
                 <tr key={o.id} className="table-row cursor-pointer">
                   <td className="table-td">
-                    <p className="font-medium text-slate-900">{o.puesto}</p>
-                    <p className="flex items-center gap-1 text-[12px] text-slate-400">
+                    <p className="font-medium text-ink">{o.puesto}</p>
+                    <p className="flex items-center gap-1 text-[12px] text-ink-faint">
                       <MapPin className="h-3 w-3" strokeWidth={1.75} />
                       {o.ubicacion} · {o.modalidad}
                     </p>
                   </td>
-                  <td className="table-td text-slate-600">{o.empresa}</td>
+                  <td className="table-td text-ink-mute">{o.empresa}</td>
                   <td className="table-td">
                     <span className="chip">{o.categoria}</span>
                   </td>
-                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-slate-500">{o.publicada}</td>
-                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-slate-500">{o.cierra}</td>
+                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-ink-mute">{o.publicada}</td>
+                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-ink-mute">{o.cierra}</td>
                   <td className="table-num">{o.candidatos}</td>
                   <td className="table-td">
                     <Status tone={estadoOferta[o.estado].tone}>{estadoOferta[o.estado].label}</Status>
@@ -140,7 +140,7 @@ export default function AdminBolsa() {
         </div>
 
         {filtered.length === 0 && (
-          <p className="px-4 py-12 text-center text-[13px] text-slate-500">
+          <p className="px-4 py-12 text-center text-[13px] text-ink-mute">
             No hay ofertas con los filtros seleccionados.
           </p>
         )}

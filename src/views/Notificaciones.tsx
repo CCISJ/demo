@@ -77,27 +77,27 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
                 */
                 <li
                   key={n.id}
-                  className={`relative py-3 pl-4 pr-4 ${urgente ? 'before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-rust-500' : ''}`}
+                  className={`relative py-3 pl-4 pr-4 ${urgente ? 'before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-alert' : ''}`}
                 >
                   <div className="flex items-baseline gap-2">
                     {!n.leida && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-600" />}
-                    <p className={`flex-1 text-[13.5px] ${n.leida ? 'text-slate-700' : 'font-semibold text-slate-900'}`}>
+                    <p className={`flex-1 text-[13.5px] ${n.leida ? 'text-ink-body' : 'font-semibold text-ink'}`}>
                       {n.titulo}
                     </p>
-                    <span className="shrink-0 whitespace-nowrap text-[12px] text-slate-400">{n.fecha}</span>
+                    <span className="shrink-0 whitespace-nowrap text-[12px] text-ink-faint">{n.fecha}</span>
                   </div>
 
-                  <p className={`mt-1 text-[13px] leading-relaxed text-slate-500 ${!n.leida ? 'pl-3.5' : ''}`}>
+                  <p className={`mt-1 text-[13px] leading-relaxed text-ink-mute ${!n.leida ? 'pl-3.5' : ''}`}>
                     {n.cuerpo}
                   </p>
 
                   <div className={`mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 ${!n.leida ? 'pl-3.5' : ''}`}>
                     {urgente && <span className="chip chip-alert">Emergente</span>}
-                    <span className="text-[12px] text-slate-400">{n.categoria}</span>
+                    <span className="text-[12px] text-ink-faint">{n.categoria}</span>
                     {destinatarioLabel[n.destinatario] && (
                       <>
-                        <span className="text-[12px] text-slate-300">·</span>
-                        <span className="text-[12px] text-slate-400">{destinatarioLabel[n.destinatario]}</span>
+                        <span className="text-[12px] text-ink-ghost">·</span>
+                        <span className="text-[12px] text-ink-faint">{destinatarioLabel[n.destinatario]}</span>
                       </>
                     )}
                   </div>
@@ -107,7 +107,7 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
           </ul>
 
           {filtered.length === 0 && (
-            <p className="px-4 py-12 text-center text-[13px] text-slate-500">
+            <p className="px-4 py-12 text-center text-[13px] text-ink-mute">
               No hay notificaciones en esta sección.
             </p>
           )}
@@ -120,7 +120,7 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
             </div>
 
             {variant === 'empresa' && (
-              <p className="border-b border-line px-4 py-2.5 text-[12.5px] text-slate-500">
+              <p className="border-b border-line px-4 py-2.5 text-[12.5px] text-ink-mute">
                 Como socio directivo recibís comunicaciones adicionales del Centro.
               </p>
             )}
@@ -129,13 +129,13 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
               {categorias.map((cat) => (
                 <li key={cat}>
                   <label className="flex cursor-pointer items-center gap-3 px-4 py-2.5">
-                    <span className="flex-1 text-[13px] text-slate-700">{cat}</span>
+                    <span className="flex-1 text-[13px] text-ink-body">{cat}</span>
                     <button
                       role="switch"
                       aria-checked={prefs[cat]}
                       onClick={() => setPrefs({ ...prefs, [cat]: !prefs[cat] })}
                       className={`relative h-[18px] w-8 shrink-0 rounded-full transition-colors ${
-                        prefs[cat] ? 'bg-brand-700' : 'bg-slate-200'
+                        prefs[cat] ? 'bg-brand-700' : 'bg-edge'
                       }`}
                     >
                       <span
@@ -155,18 +155,18 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
               <h2 className="card-title">Correo electrónico</h2>
             </div>
             <div className="space-y-2 px-4 py-3">
-              <label className="flex items-center gap-2 text-[13px] text-slate-700">
+              <label className="flex items-center gap-2 text-[13px] text-ink-body">
                 <input
                   type="checkbox"
-                  className="h-3.5 w-3.5 rounded border-slate-300 text-brand-600 focus:ring-brand-400"
+                  className="h-3.5 w-3.5 rounded border-edge text-brand-600 focus:ring-brand-400"
                   defaultChecked
                 />
                 Recibir copia por email
               </label>
-              <label className="flex items-center gap-2 text-[13px] text-slate-700">
+              <label className="flex items-center gap-2 text-[13px] text-ink-body">
                 <input
                   type="checkbox"
-                  className="h-3.5 w-3.5 rounded border-slate-300 text-brand-600 focus:ring-brand-400"
+                  className="h-3.5 w-3.5 rounded border-edge text-brand-600 focus:ring-brand-400"
                   defaultChecked
                 />
                 Resumen semanal de novedades

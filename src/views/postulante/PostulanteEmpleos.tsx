@@ -34,7 +34,7 @@ export default function PostulanteEmpleos() {
           lo mismo que el select que tiene al lado. */}
       <div className="flex flex-col gap-2 lg:flex-row">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-faint" />
           <input
             className="input pl-8"
             placeholder="¿Qué puesto estás buscando?"
@@ -67,7 +67,7 @@ export default function PostulanteEmpleos() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="surface px-4 py-12 text-center text-[13px] text-slate-500">
+        <div className="surface px-4 py-12 text-center text-[13px] text-ink-mute">
           No hay ofertas que coincidan con tu búsqueda. Probá ajustar los filtros.
         </div>
       ) : (
@@ -78,16 +78,16 @@ export default function PostulanteEmpleos() {
             <li key={o.id}>
               <button
                 onClick={() => setSelected(o)}
-                className="flex w-full items-start gap-4 px-4 py-3.5 text-left transition-colors hover:bg-slate-50"
+                className="flex w-full items-start gap-4 px-4 py-3.5 text-left transition-colors hover:bg-band"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline gap-2">
-                    <p className="text-[14px] font-semibold text-slate-900">{o.puesto}</p>
+                    <p className="text-[14px] font-semibold text-ink">{o.puesto}</p>
                     <span className="chip">{o.categoria}</span>
                   </div>
-                  <p className="mt-0.5 text-[12.5px] text-slate-500">{o.empresa}</p>
-                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-slate-600">{o.descripcion}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-slate-400">
+                  <p className="mt-0.5 text-[12.5px] text-ink-mute">{o.empresa}</p>
+                  <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-ink-mute">{o.descripcion}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-ink-faint">
                     <span className="inline-flex items-center gap-1">
                       <MapPin className="h-3 w-3" strokeWidth={1.75} />
                       {o.ubicacion}
@@ -104,8 +104,8 @@ export default function PostulanteEmpleos() {
                 </div>
 
                 <div className="flex shrink-0 flex-col items-end gap-2">
-                  <span className="font-mono text-[12.5px] tabular-nums text-slate-900">{o.salario}</span>
-                  <span className="text-slate-300 transition-colors hover:text-brand-700">
+                  <span className="font-mono text-[12.5px] tabular-nums text-ink">{o.salario}</span>
+                  <span className="text-ink-ghost transition-colors hover:text-brand-700">
                     <Bookmark className="h-4 w-4" strokeWidth={1.75} />
                   </span>
                 </div>
@@ -140,16 +140,16 @@ function OfertaModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-900/25" onClick={onClose} />
-      <div className="animate-fade-in relative z-10 flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-line bg-white shadow-pop">
+      <div className="absolute inset-0 bg-chrome/30" onClick={onClose} />
+      <div className="animate-fade-in relative z-10 flex w-full max-w-xl flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-pop">
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
           <div className="min-w-0">
-            <h2 className="text-[16px] font-semibold text-slate-900">{oferta.puesto}</h2>
-            <p className="mt-0.5 text-[13px] text-slate-500">{oferta.empresa}</p>
+            <h2 className="text-[16px] font-semibold text-ink">{oferta.puesto}</h2>
+            <p className="mt-0.5 text-[13px] text-ink-mute">{oferta.empresa}</p>
           </div>
           <button
             onClick={onClose}
-            className="-mr-2 -mt-1 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="-mr-2 -mt-1 rounded-md p-2 text-ink-faint transition-colors hover:bg-band hover:text-ink-body"
             aria-label="Cerrar"
           >
             <X className="h-4 w-4" />
@@ -159,29 +159,29 @@ function OfertaModal({
         <div className="max-h-[60vh] overflow-y-auto">
           <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 border-b border-line px-5 py-3.5">
             <div>
-              <dt className="text-[12px] text-slate-400">Ubicación</dt>
-              <dd className="text-[13px] text-slate-800">{oferta.ubicacion}</dd>
+              <dt className="text-[12px] text-ink-faint">Ubicación</dt>
+              <dd className="text-[13px] text-ink-body">{oferta.ubicacion}</dd>
             </div>
             <div>
-              <dt className="text-[12px] text-slate-400">Modalidad</dt>
-              <dd className="text-[13px] text-slate-800">{oferta.modalidad}</dd>
+              <dt className="text-[12px] text-ink-faint">Modalidad</dt>
+              <dd className="text-[13px] text-ink-body">{oferta.modalidad}</dd>
             </div>
             <div>
-              <dt className="text-[12px] text-slate-400">Remuneración</dt>
-              <dd className="font-mono text-[12.5px] text-slate-800">{oferta.salario}</dd>
+              <dt className="text-[12px] text-ink-faint">Remuneración</dt>
+              <dd className="font-mono text-[12.5px] text-ink-body">{oferta.salario}</dd>
             </div>
             <div>
-              <dt className="text-[12px] text-slate-400">Cierra</dt>
-              <dd className="font-mono text-[12.5px] text-slate-800">{oferta.cierra}</dd>
+              <dt className="text-[12px] text-ink-faint">Cierra</dt>
+              <dd className="font-mono text-[12.5px] text-ink-body">{oferta.cierra}</dd>
             </div>
           </dl>
 
           <div className="px-5 py-4">
             <p className="section-label">Descripción</p>
-            <p className="mt-1.5 text-[13px] leading-relaxed text-slate-600">{oferta.descripcion}</p>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-ink-mute">{oferta.descripcion}</p>
 
             <p className="section-label mt-4">Requisitos</p>
-            <ul className="mt-1.5 space-y-1 text-[13px] text-slate-600">
+            <ul className="mt-1.5 space-y-1 text-[13px] text-ink-mute">
               <li>· Experiencia previa en el rubro</li>
               <li>· Carnet de salud al día</li>
               <li>· Disponibilidad horaria</li>
