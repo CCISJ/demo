@@ -4,9 +4,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
+        // Fondo de la aplicación. Apenas más oscuro que el blanco de las
+        // superficies: alcanza para que una tarjeta se lea sin sombra.
+        canvas: '#f4f5f7',
+        // Una única hairline para todo el sistema — bordes, divisores,
+        // separadores de tabla. Que sea siempre la misma es lo que hace que la
+        // pantalla se vea ordenada.
+        line: '#e5e7ea',
         // Institutional green — primary brand (CCISJ logo green)
         brand: {
           50: '#f2faf6',
@@ -74,10 +82,14 @@ export default {
           900: '#78350f',
         },
       },
+      // Las superficies se separan con una hairline, no con sombra. La sombra
+      // queda reservada para lo que realmente flota sobre la página
+      // (dropdowns, popovers): si todo tiene sombra, nada parece elevado.
       boxShadow: {
-        card: '0 1px 2px 0 rgb(17 30 49 / 0.04), 0 1px 3px 0 rgb(17 30 49 / 0.06)',
-        'card-hover': '0 8px 24px -8px rgb(17 30 49 / 0.12), 0 2px 6px -2px rgb(17 30 49 / 0.08)',
-        'soft': '0 1px 0 0 rgb(17 30 49 / 0.04), 0 12px 32px -16px rgb(17 30 49 / 0.10)',
+        card: 'none',
+        'card-hover': 'none',
+        soft: '0 1px 2px 0 rgb(15 23 42 / 0.04)',
+        pop: '0 4px 6px -2px rgb(15 23 42 / 0.05), 0 12px 28px -8px rgb(15 23 42 / 0.14)',
       },
       keyframes: {
         'fade-in': {
