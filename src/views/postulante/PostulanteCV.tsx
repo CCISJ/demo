@@ -40,53 +40,49 @@ export default function PostulanteCV() {
         actions={<button className="btn-outline"><Download className="h-4 w-4" /> Descargar CV</button>}
       />
 
-      {/* Progress + CV upload */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="surface lg:col-span-2 p-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-brand-900">Progreso del perfil</h2>
-            <span className="text-2xl font-bold text-brand-700">75%</span>
+      {/*
+        Estado del perfil: una línea. Antes eran dos tarjetas — barra con
+        degradado, cinco píldoras de colores y un recuadro punteado con ícono
+        grande — para decir "te falta educación y cursos".
+      */}
+      <div className="surface flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
+        <div className="w-full max-w-sm">
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="text-[13px] font-medium text-slate-900">Perfil completado</p>
+            <p className="font-mono text-[13px] tabular-nums text-slate-900">75%</p>
           </div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-100">
-            <div className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-700" style={{ width: '75%' }} />
+          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-full rounded-full bg-brand-600" style={{ width: '75%' }} />
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge tone="jad" variant="soft"><Check className="h-3 w-3" /> Datos personales</Badge>
-            <Badge tone="jad" variant="soft"><Check className="h-3 w-3" /> Presentación</Badge>
-            <Badge tone="jad" variant="soft"><Check className="h-3 w-3" /> Experiencia</Badge>
-            <Badge tone="sol" variant="soft">Educación incompleta</Badge>
-            <Badge tone="slate" variant="soft">Cursos pendientes</Badge>
-          </div>
+          <p className="mt-1.5 text-[12px] text-slate-400">Falta completar educación y cursos.</p>
         </div>
 
-        <div className="surface flex flex-col items-center justify-center gap-3 border-2 border-dashed border-slate-200 bg-slate-50/50 p-5 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-brand-600 ring-1 ring-slate-200"><Upload className="h-6 w-6" /></span>
-          <div>
-            <p className="text-sm font-semibold text-brand-900">Subir CV existente</p>
-            <p className="text-xs text-slate-500">PDF o Word · máx. 5MB</p>
-          </div>
-          <button className="btn-outline text-xs"><Upload className="h-3.5 w-3.5" /> Seleccionar archivo</button>
-        </div>
+        <button className="btn-outline shrink-0">
+          <Upload className="h-3.5 w-3.5" strokeWidth={1.75} /> Subir CV existente
+        </button>
       </div>
 
-      {/* Tabs */}
+      {/* Secciones del CV */}
       <div className="surface overflow-hidden">
-        <div className="flex gap-1 overflow-x-auto border-b border-slate-100 p-2">
+        {/* Pestañas subrayadas: nueve botones con ícono y fondo propio pesaban
+            más que el formulario que encabezan. */}
+        <div className="flex gap-1 overflow-x-auto border-b border-line px-2">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                tab === t.id ? 'bg-brand-50 text-brand-700' : 'text-slate-500 hover:bg-slate-100 hover:text-brand-700'
+              className={`shrink-0 border-b-2 px-2.5 py-2.5 text-[13px] font-medium transition-colors ${
+                tab === t.id
+                  ? 'border-brand-700 text-slate-900'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
-              <t.icon className="h-4 w-4" />
               {t.label}
             </button>
           ))}
         </div>
 
-        <div className="p-5">
+        <div className="p-4">
           {tab === 'datos' && <DatosPersonales />}
           {tab === 'presentacion' && <Presentacion />}
           {tab === 'experiencia' && <Experiencia />}
@@ -97,7 +93,7 @@ export default function PostulanteCV() {
           {tab === 'referencias' && <Referencias />}
           {tab === 'categorias' && (
             <div>
-              <h3 className="text-base font-bold text-brand-900">¿En qué áreas te gustaría trabajar?</h3>
+              <h3 className="card-title">¿En qué áreas te gustaría trabajar?</h3>
               <p className="mt-1 text-sm text-slate-500">Seleccioná las categorías laborales de tu interés. Te notificaremos cuando haya ofertas nuevas.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {categoriasLaborales.map((c) => {
@@ -106,11 +102,13 @@ export default function PostulanteCV() {
                     <button
                       key={c}
                       onClick={() => toggleCat(c)}
-                      className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${
-                        active ? 'bg-brand-700 text-white shadow-sm ring-1 ring-brand-700' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50'
+                      className={`flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[13px] font-medium transition-colors ${
+                        active
+                          ? 'border-brand-700 bg-brand-50 text-brand-800'
+                          : 'border-line bg-white text-slate-600 hover:bg-slate-50'
                       }`}
                     >
-                      {active ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                      {active && <Check className="h-3.5 w-3.5" strokeWidth={2} />}
                       {c}
                     </button>
                   );
@@ -128,7 +126,7 @@ export default function PostulanteCV() {
 function SectionHeader({ title, action }: { title: string; action?: React.ReactNode }) {
   return (
     <div className="mb-4 flex items-center justify-between">
-      <h3 className="text-base font-bold text-brand-900">{title}</h3>
+      <h3 className="card-title">{title}</h3>
       {action}
     </div>
   );
@@ -178,9 +176,8 @@ function Experiencia() {
           <div key={i} className="rounded-xl border border-slate-200 p-4">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Briefcase className="h-5 w-5" /></span>
                 <div>
-                  <p className="font-semibold text-brand-900">{e.puesto}</p>
+                  <p className="font-medium text-slate-900">{e.puesto}</p>
                   <p className="text-sm text-slate-500">{e.empresa}</p>
                   <p className="mt-0.5 text-xs text-slate-400">{e.desde} — {e.hasta}</p>
                 </div>
@@ -206,9 +203,8 @@ function Educacion() {
         <div className="rounded-xl border border-slate-200 p-4">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gold-50 text-gold-600"><GraduationCap className="h-5 w-5" /></span>
               <div>
-                <p className="font-semibold text-brand-900">Bachillerato completo</p>
+                <p className="font-medium text-slate-900">Bachillerato completo</p>
                 <p className="text-sm text-slate-500">Liceo N°1 San José</p>
                 <p className="text-xs text-slate-400">2007 — 2012</p>
               </div>
@@ -234,9 +230,8 @@ function Cursos() {
           { nombre: 'Manipulación de cargas', ente: 'BPS — SUNCA', anio: '2021' },
         ].map((c, i) => (
           <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 p-4">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-jad-50 text-jad-600"><Award className="h-5 w-5" /></span>
             <div className="flex-1">
-              <p className="font-semibold text-brand-900">{c.nombre}</p>
+              <p className="font-medium text-slate-900">{c.nombre}</p>
               <p className="text-xs text-slate-400">{c.ente} · {c.anio}</p>
             </div>
             <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-rust-600"><Trash2 className="h-4 w-4" /></button>
@@ -280,9 +275,8 @@ function Certificados() {
           { nombre: 'Certificado antecedentes.pdf', fecha: '2026' },
         ].map((c, i) => (
           <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-rust-50 text-rust-600"><FileText className="h-4 w-4" /></span>
             <div className="flex-1">
-              <p className="text-sm font-medium text-brand-900">{c.nombre}</p>
+              <p className="text-[13px] text-slate-800">{c.nombre}</p>
               <p className="text-xs text-slate-400">Subido en {c.fecha}</p>
             </div>
             <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100"><Download className="h-4 w-4" /></button>
@@ -306,7 +300,7 @@ function Referencias() {
           <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 p-4">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-500"><Phone className="h-5 w-5" /></span>
             <div className="flex-1">
-              <p className="font-semibold text-brand-900">{r.nombre}</p>
+              <p className="font-medium text-slate-900">{r.nombre}</p>
               <p className="text-xs text-slate-500">{r.cargo}</p>
               <p className="text-xs text-slate-400">{r.telefono}</p>
             </div>

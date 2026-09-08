@@ -1,207 +1,265 @@
-'use client';
+"use client";
 
+import { Download, Plus, Search, Wallet, Users } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
+import Status from "@/components/Status";
+import { useNav } from "@/components/navContext";
 import {
-  Users, Briefcase, UserCircle, FileText, Wallet, TrendingUp,
-  ArrowUpRight, ArrowRight, Bell, CalendarDays, Plus, Search, Download,
-} from 'lucide-react';
-import StatCard from '@/components/StatCard';
-import Badge from '@/components/Badge';
-import PageHeader from '@/components/PageHeader';
-import { useNav } from '@/components/navContext';
-import {
-  socios, ofertas, postulaciones, movimientosCaja, actividades, formatPesos,
-} from '@/data/mockData';
+  socios,
+  ofertas,
+  movimientosCaja,
+  actividades,
+  facturas,
+  formatPesos,
+} from "@/data/mockData";
+
+const mesesCortos = [
+  "ene",
+  "feb",
+  "mar",
+  "abr",
+  "may",
+  "jun",
+  "jul",
+  "ago",
+  "sep",
+  "oct",
+  "nov",
+  "dic",
+];
+
+/** "02/09/2026" → "sep" */
+const mesCorto = (fecha: string) =>
+  mesesCortos[Number(fecha.split("/")[1]) - 1] ?? "";
 
 export default function AdminDashboard() {
   const { onNavigate } = useNav();
-  const activos = socios.filter((s) => s.estado === 'activo').length;
-  const deudores = socios.filter((s) => s.pago === 'deudor').length;
-  const ofertasActivas = ofertas.filter((o) => o.estado === 'activa').length;
-  const postulantesRegistrados = 1840;
-  const ingresosMes = movimientosCaja.filter((m) => m.tipo === 'ingreso').reduce((a, m) => a + m.monto, 0);
-  const egresosMes = movimientosCaja.filter((m) => m.tipo === 'egreso').reduce((a, m) => a + m.monto, 0);
 
-  const quickActions = [
-    { label: 'Agregar socio', icon: Users, tone: 'brand', target: 'socios' as const },
-    { label: 'Publicar oferta', icon: Briefcase, tone: 'gold', target: 'bolsa' as const },
-    { label: 'Buscar candidatos', icon: Search, tone: 'jad', target: 'candidatos' as const },
-    { label: 'Registrar movimiento', icon: Wallet, tone: 'sol', target: 'caja' as const },
+  const activos = socios.filter((s) => s.estado === "activo").length;
+  const deudores = socios.filter((s) => s.pago === "deudor").length;
+  const ofertasActivas = ofertas.filter((o) => o.estado === "activa").length;
+  const facturasPendientes = facturas.filter(
+    (f) => f.estado === "pendiente",
+  ).length;
+  const ingresosMes = movimientosCaja
+    .filter((m) => m.tipo === "ingreso")
+    .reduce((a, m) => a + m.monto, 0);
+  const egresosMes = movimientosCaja
+    .filter((m) => m.tipo === "egreso")
+    .reduce((a, m) => a + m.monto, 0);
+  const saldo = ingresosMes - egresosMes;
+
+  const accesos = [
+    { label: "Agregar socio", icon: Users, target: "socios" as const },
+    { label: "Publicar oferta", icon: Plus, target: "bolsa" as const },
+    { label: "Buscar candidatos", icon: Search, target: "candidatos" as const },
+    { label: "Registrar movimiento", icon: Wallet, target: "caja" as const },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
         title="Buen día, Martín"
-        subtitle="Resumen institucional del período · Agosto 2026"
+        subtitle="Período agosto 2026"
         actions={
-          <>
-            <button className="btn-outline"><Download className="h-4 w-4" /> Exportar</button>
-            <button className="btn-primary"><Plus className="h-4 w-4" /> Acción rápida</button>
-          </>
+          <button className="btn-outline">
+            <Download className="h-3.5 w-3.5" strokeWidth={1.75} /> Exportar
+          </button>
         }
       />
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Socios activos" value={String(activos)} icon={Users} tone="brand" trend={{ value: '+4 este mes', up: true }} hint={`${deudores} con deuda`} />
-        <StatCard label="Ofertas laborales activas" value={String(ofertasActivas)} icon={Briefcase} tone="gold" trend={{ value: '+2 esta semana', up: true }} />
-        <StatCard label="Postulantes registrados" value={postulantesRegistrados.toLocaleString('es-UY')} icon={UserCircle} tone="jad" trend={{ value: '+86', up: true }} />
-        <StatCard label="Facturación del período" value={formatPesos(ingresosMes)} icon={FileText} tone="sol" trend={{ value: '+12% vs. mes anterior', up: true }} />
+      {/* Las cuatro cifras del período, en una sola caja. */}
+      <div className="metric-strip">
+        <div className="metric">
+          <p className="metric-label">Socios activos</p>
+          <p className="metric-value">{activos}</p>
+          <p className="metric-note">de {socios.length} registrados</p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Ofertas abiertas</p>
+          <p className="metric-value">{ofertasActivas}</p>
+          <p className="metric-note">
+            {ofertas.length - ofertasActivas} cerradas o en borrador
+          </p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Postulantes registrados</p>
+          <p className="metric-value">1.840</p>
+          <p className="metric-note">86 nuevos este mes</p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Ingresos del período</p>
+          <p className="metric-value">{formatPesos(ingresosMes)}</p>
+          <p className="metric-note">Saldo {formatPesos(saldo)}</p>
+        </div>
       </div>
 
-      {/* Quick actions */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {quickActions.map((a) => (
+      {/* Accesos directos: una sola barra, un solo peso visual. */}
+      <div className="surface flex flex-wrap divide-line sm:divide-x">
+        {accesos.map((a) => (
           <button
             key={a.label}
-            onClick={() => onNavigate('admin', a.target)}
-            className="surface surface-hover group flex items-center gap-3 p-4 text-left"
+            onClick={() => onNavigate("admin", a.target)}
+            className="group flex flex-1 items-center gap-2 px-4 py-3 text-[13px] font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900"
           >
-            <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-              a.tone === 'brand' ? 'bg-brand-50 text-brand-600' :
-              a.tone === 'gold' ? 'bg-gold-50 text-gold-600' :
-              a.tone === 'jad' ? 'bg-jad-50 text-jad-600' : 'bg-sol-50 text-sol-600'
-            }`}>
-              <a.icon className="h-5 w-5" />
-            </span>
-            <span className="flex-1 text-sm font-semibold text-brand-900">{a.label}</span>
-            <ArrowRight className="h-4 w-4 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-500" />
+            <a.icon
+              className="h-4 w-4 text-slate-400 transition-colors group-hover:text-brand-700"
+              strokeWidth={1.75}
+            />
+            <span className="whitespace-nowrap">{a.label}</span>
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Movimientos recientes */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        {/* Movimientos */}
         <div className="surface lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-            <div>
-              <h2 className="text-base font-bold text-brand-900">Movimientos recientes</h2>
-              <p className="text-xs text-slate-500">Caja · últimos 8 movimientos</p>
-            </div>
-            <button onClick={() => onNavigate('admin', 'caja')} className="text-xs font-semibold text-brand-600 hover:text-brand-800">
-              Ver caja completa
+          <div className="card-head">
+            <h2 className="card-title">Movimientos recientes</h2>
+            <button
+              onClick={() => onNavigate("admin", "caja")}
+              className="btn-link"
+            >
+              Ver caja
             </button>
           </div>
-          <div className="divide-y divide-slate-100">
-            {movimientosCaja.slice(0, 6).map((m) => (
-              <div key={m.id} className="flex items-center gap-3 px-5 py-3.5">
-                <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                  m.tipo === 'ingreso' ? 'bg-jad-50 text-jad-600' : 'bg-rust-50 text-rust-600'
-                }`}>
-                  {m.tipo === 'ingreso' ? <ArrowUpRight className="h-4 w-4" /> : <TrendingUp className="h-4 w-4 rotate-90" />}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-brand-900">{m.concepto}</p>
-                  <p className="text-xs text-slate-400">{m.fecha} · {m.cuenta}</p>
-                </div>
-                <span className={`text-sm font-bold ${m.tipo === 'ingreso' ? 'text-jad-700' : 'text-rust-700'}`}>
-                  {m.tipo === 'ingreso' ? '+' : '−'}{formatPesos(m.monto)}
-                </span>
-              </div>
-            ))}
-          </div>
+          <table className="w-full">
+            <tbody>
+              {movimientosCaja.slice(0, 6).map((m) => (
+                <tr
+                  key={m.id}
+                  className="border-t border-line first:border-t-0"
+                >
+                  <td className="table-td">
+                    <p className="truncate font-medium text-slate-900">
+                      {m.concepto}
+                    </p>
+                    <p className="mt-0.5 text-[12px] text-slate-400">
+                      {m.fecha} · {m.cuenta}
+                    </p>
+                  </td>
+                  {/* El signo y el color solo distinguen entrada de salida: es
+                      la única lectura que el ojo necesita en esta columna. */}
+                  <td
+                    className={`table-num ${m.tipo === "ingreso" ? "text-slate-900" : "text-rust-700"}`}
+                  >
+                    {m.tipo === "ingreso" ? "+" : "−"}
+                    {formatPesos(m.monto)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* Resumen financiero + alertas */}
-        <div className="space-y-6">
-          <div className="surface p-5">
-            <h2 className="text-base font-bold text-brand-900">Resumen del período</h2>
-            <div className="mt-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-500">Ingresos</span>
-                <span className="text-sm font-bold text-jad-700">{formatPesos(ingresosMes)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-500">Egresos</span>
-                <span className="text-sm font-bold text-rust-700">{formatPesos(egresosMes)}</span>
-              </div>
-              <div className="h-px bg-slate-100" />
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-brand-900">Saldo</span>
-                <span className="text-lg font-bold text-brand-900">{formatPesos(ingresosMes - egresosMes)}</span>
-              </div>
+        <div className="space-y-5">
+          {/* Resumen */}
+          <div className="surface">
+            <div className="card-head">
+              <h2 className="card-title">Resumen del período</h2>
             </div>
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
-              <div className="flex h-full">
-                <div className="bg-jad-500" style={{ width: `${(ingresosMes / (ingresosMes + egresosMes)) * 100}%` }} />
-                <div className="bg-rust-400" style={{ width: `${(egresosMes / (ingresosMes + egresosMes)) * 100}%` }} />
-              </div>
+            <div className="px-4 py-3">
+              <dl className="space-y-2">
+                <div className="flex items-baseline justify-between gap-3">
+                  <dt className="text-[13px] text-slate-500">Ingresos</dt>
+                  <dd className="font-mono text-[13px] tabular-nums text-slate-900">
+                    {formatPesos(ingresosMes)}
+                  </dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-3">
+                  <dt className="text-[13px] text-slate-500">Egresos</dt>
+                  <dd className="font-mono text-[13px] tabular-nums text-slate-900">
+                    {formatPesos(egresosMes)}
+                  </dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-3 border-t border-line pt-2">
+                  <dt className="text-[13px] font-medium text-slate-900">
+                    Saldo
+                  </dt>
+                  <dd
+                    className={`font-mono text-[15px] font-medium tabular-nums ${
+                      saldo < 0 ? "text-rust-700" : "text-slate-900"
+                    }`}
+                  >
+                    {formatPesos(saldo)}
+                  </dd>
+                </div>
+              </dl>
             </div>
           </div>
 
-          <div className="surface p-5">
-            <div className="flex items-center gap-2">
-              <Bell className="h-4 w-4 text-rust-500" />
-              <h2 className="text-base font-bold text-brand-900">Atención</h2>
+          {/* Pendientes: una lista, no dos cajas de color. */}
+          <div className="surface">
+            <div className="card-head">
+              <h2 className="card-title">Requiere atención</h2>
             </div>
-            <div className="mt-3 space-y-2.5">
-              <div className="flex items-start gap-2 rounded-xl bg-rust-50 p-3 ring-1 ring-rust-100">
-                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-rust-500" />
-                <p className="text-xs text-rust-800">{deudores} socios con cuota vencida. Requiere gestión de cobranza.</p>
-              </div>
-              <div className="flex items-start gap-2 rounded-xl bg-sol-50 p-3 ring-1 ring-sol-200">
-                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-sol-500" />
-                <p className="text-xs text-sol-800">2 facturas FEU pendientes de emisión este mes.</p>
-              </div>
-            </div>
+            <ul className="divide-y divide-line">
+              <li className="flex items-start justify-between gap-3 px-4 py-3">
+                <div>
+                  <p className="text-[13px] text-slate-700">Cuotas vencidas</p>
+                  <p className="mt-0.5 text-[12px] text-slate-400">
+                    Requiere gestión de cobranza
+                  </p>
+                </div>
+                <button
+                  onClick={() => onNavigate("admin", "socios")}
+                  className="shrink-0"
+                >
+                  <Status tone="alert">{deudores} socios</Status>
+                </button>
+              </li>
+              <li className="flex items-start justify-between gap-3 px-4 py-3">
+                <div>
+                  <p className="text-[13px] text-slate-700">
+                    Facturas sin emitir
+                  </p>
+                  <p className="mt-0.5 text-[12px] text-slate-400">
+                    FEU del mes en curso
+                  </p>
+                </div>
+                <button
+                  onClick={() => onNavigate("admin", "facturacion")}
+                  className="shrink-0"
+                >
+                  <Status tone="warn">{facturasPendientes} facturas</Status>
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Próximas actividades + postulaciones recientes */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="surface">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-brand-600" />
-              <h2 className="text-base font-bold text-brand-900">Próximas actividades</h2>
-            </div>
-            <Badge tone="brand" variant="soft">{actividades.length} programadas</Badge>
-          </div>
-          <div className="divide-y divide-slate-100">
-            {actividades.map((a) => (
-              <div key={a.id} className="flex items-center gap-4 px-5 py-3.5">
-                <div className="flex h-12 w-12 flex-col items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-100">
-                  <span className="text-[10px] font-semibold uppercase">{a.fecha.split('/')[1]}</span>
-                  <span className="text-base font-bold leading-none">{a.fecha.split('/')[0]}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-brand-900">{a.titulo}</p>
-                  <p className="text-xs text-slate-400">{a.tipo} · {a.fecha}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs font-semibold text-brand-700">{a.inscritos}/{a.cupos}</p>
-                  <p className="text-[11px] text-slate-400">inscriptos</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Actividades */}
+      <div className="surface">
+        <div className="card-head">
+          <h2 className="card-title">Próximas actividades</h2>
+          <span className="text-[12px] text-slate-400">
+            {actividades.length} programadas
+          </span>
         </div>
-
-        <div className="surface">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-            <h2 className="text-base font-bold text-brand-900">Postulaciones recientes</h2>
-            <button onClick={() => onNavigate('admin', 'bolsa')} className="text-xs font-semibold text-brand-600 hover:text-brand-800">
-              Ver bolsa de trabajo
-            </button>
-          </div>
-          <div className="divide-y divide-slate-100">
-            {postulaciones.map((p) => (
-              <div key={p.id} className="flex items-center gap-3 px-5 py-3.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
-                  <UserCircle className="h-5 w-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-brand-900">{p.puesto}</p>
-                  <p className="text-xs text-slate-400">{p.empresa} · {p.fecha}</p>
-                </div>
-                <Badge tone={p.estado === 'revision' ? 'sol' : p.estado === 'finalizada' ? 'jad' : p.estado === 'no-seleccionado' ? 'rust' : 'slate'}>
-                  {p.estado === 'enviada' ? 'Enviada' : p.estado === 'revision' ? 'En revisión' : p.estado === 'finalizada' ? 'Finalizada' : 'No seleccionado'}
-                </Badge>
+        <ul className="divide-y divide-line">
+          {actividades.map((a) => (
+            <li key={a.id} className="flex items-center gap-3 px-4 py-2.5">
+              <div className="w-11 shrink-0 border-r border-line pr-3 text-center">
+                <p className="font-mono text-[15px] font-medium leading-none tabular-nums text-slate-900">
+                  {a.fecha.split("/")[0]}
+                </p>
+                <p className="mt-1 text-[10px] uppercase tracking-wide text-slate-400">
+                  {mesCorto(a.fecha)}
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-medium text-slate-900">
+                  {a.titulo}
+                </p>
+                <p className="text-[12px] text-slate-400">{a.tipo}</p>
+              </div>
+              <p className="shrink-0 font-mono text-[12.5px] tabular-nums text-slate-500">
+                {a.inscritos}/{a.cupos}
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

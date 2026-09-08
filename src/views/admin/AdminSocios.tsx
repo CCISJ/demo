@@ -1,12 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Search, Plus, Filter, Download, MoreHorizontal, ChevronRight, X,
-  Users, Mail, Phone, Calendar, FileText,
-} from 'lucide-react';
+import { Search, Plus, Download, X } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import Badge from '@/components/Badge';
+import Status from '@/components/Status';
 import { socios, type Socio } from '@/data/mockData';
 
 export default function AdminSocios() {
@@ -24,261 +21,234 @@ export default function AdminSocios() {
     return true;
   });
 
-  const counts = {
-    total: socios.length,
-    activos: socios.filter((s) => s.estado === 'activo').length,
-    deudores: socios.filter((s) => s.pago === 'deudor').length,
-    directivos: socios.filter((s) => s.tipo === 'directivo').length,
+  const hayFiltros = query !== '' || tipo !== 'todos' || estado !== 'todos' || pago !== 'todos';
+
+  const limpiar = () => {
+    setQuery('');
+    setTipo('todos');
+    setEstado('todos');
+    setPago('todos');
   };
 
+  const activos = socios.filter((s) => s.estado === 'activo').length;
+  const deudores = socios.filter((s) => s.pago === 'deudor').length;
+  const directivos = socios.filter((s) => s.tipo === 'directivo').length;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
-        title="Gestión de socios"
-        subtitle="Administración de empresas socias del CCISJ"
+        title="Socios"
         actions={
           <>
-            <button className="btn-outline"><Download className="h-4 w-4" /> Exportar</button>
-            <button className="btn-primary"><Plus className="h-4 w-4" /> Agregar socio</button>
+            <button className="btn-outline">
+              <Download className="h-3.5 w-3.5" strokeWidth={1.75} /> Exportar
+            </button>
+            <button className="btn-primary">
+              <Plus className="h-3.5 w-3.5" strokeWidth={2} /> Agregar socio
+            </button>
           </>
         }
       />
 
-      {/* Summary chips */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          { label: 'Total socios', value: counts.total, tone: 'brand' as const },
-          { label: 'Activos', value: counts.activos, tone: 'jad' as const },
-          { label: 'Con deuda', value: counts.deudores, tone: 'rust' as const },
-          { label: 'Directivos', value: counts.directivos, tone: 'gold' as const },
-        ].map((c) => (
-          <div key={c.label} className="surface flex items-center gap-3 p-4">
-            <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-              c.tone === 'brand' ? 'bg-brand-50 text-brand-600' :
-              c.tone === 'jad' ? 'bg-jad-50 text-jad-600' :
-              c.tone === 'rust' ? 'bg-rust-50 text-rust-600' : 'bg-gold-50 text-gold-600'
-            }`}>
-              <Users className="h-4 w-4" />
-            </span>
-            <div>
-              <p className="text-lg font-bold text-brand-900">{c.value}</p>
-              <p className="text-xs text-slate-500">{c.label}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Filters */}
-      <div className="surface p-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-          <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <input
-              className="input pl-9"
-              placeholder="Buscar por empresa, contacto o RUT…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <FilterPill label="Tipo" value={tipo} onChange={(v) => setTipo(v as typeof tipo)} options={[['todos', 'Todos'], ['comun', 'Común'], ['directivo', 'Directivo']]} />
-            <FilterPill label="Estado" value={estado} onChange={(v) => setEstado(v as typeof estado)} options={[['todos', 'Todos'], ['activo', 'Activo'], ['inactivo', 'Inactivo']]} />
-            <FilterPill label="Pago" value={pago} onChange={(v) => setPago(v as typeof pago)} options={[['todos', 'Todos'], ['al-dia', 'Al día'], ['deudor', 'Deudor']]} />
-          </div>
+      <div className="metric-strip">
+        <div className="metric">
+          <p className="metric-label">Total</p>
+          <p className="metric-value">{socios.length}</p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Activos</p>
+          <p className="metric-value">{activos}</p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Con deuda</p>
+          <p className="metric-value">{deudores}</p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Directivos</p>
+          <p className="metric-value">{directivos}</p>
         </div>
       </div>
 
-      {/* Table */}
+      {/*
+        Filtros: los tres grupos de píldoras (diez botones en fila) pasaron a
+        selects. Ocupan un tercio, se leen de un vistazo y escalan cuando
+        mañana haya diez categorías en vez de dos.
+      */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <input
+            className="input pl-8"
+            placeholder="Buscar por empresa, contacto o RUT…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+
+        <select className="input sm:w-auto" value={tipo} onChange={(e) => setTipo(e.target.value as typeof tipo)}>
+          <option value="todos">Todos los tipos</option>
+          <option value="comun">Común</option>
+          <option value="directivo">Directivo</option>
+        </select>
+
+        <select className="input sm:w-auto" value={estado} onChange={(e) => setEstado(e.target.value as typeof estado)}>
+          <option value="todos">Todos los estados</option>
+          <option value="activo">Activo</option>
+          <option value="inactivo">Inactivo</option>
+        </select>
+
+        <select className="input sm:w-auto" value={pago} onChange={(e) => setPago(e.target.value as typeof pago)}>
+          <option value="todos">Todos los pagos</option>
+          <option value="al-dia">Al día</option>
+          <option value="deudor">Deudor</option>
+        </select>
+
+        {hayFiltros && (
+          <button onClick={limpiar} className="btn-ghost shrink-0">
+            <X className="h-3.5 w-3.5" /> Limpiar
+          </button>
+        )}
+      </div>
+
       <div className="surface overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[860px]">
-            <thead className="bg-slate-50/60">
-              <tr>
+          <table className="w-full min-w-[760px]">
+            <thead>
+              <tr className="border-b border-line">
                 <th className="table-th">Empresa</th>
                 <th className="table-th">RUT</th>
                 <th className="table-th">Tipo</th>
                 <th className="table-th">Contacto</th>
                 <th className="table-th">Estado</th>
-                <th className="table-th">Pago</th>
-                <th className="table-th">Último pago</th>
-                <th className="table-th text-right">Acciones</th>
+                <th className="table-th">Cuota</th>
+                <th className="table-th text-right">Último pago</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((s) => (
-                <tr key={s.id} className="table-row">
+                <tr key={s.id} className="table-row cursor-pointer" onClick={() => setSelected(s)}>
                   <td className="table-td">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-xs font-bold text-brand-700">
-                        {s.empresa.slice(0, 2).toUpperCase()}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-brand-900">{s.empresa}</p>
-                        <p className="text-xs text-slate-400">{s.categoria}</p>
-                      </div>
-                    </div>
+                    <p className="font-medium text-slate-900">{s.empresa}</p>
+                    <p className="text-[12px] text-slate-400">{s.categoria}</p>
                   </td>
-                  <td className="table-td font-mono text-xs text-slate-500">{s.rut}</td>
+                  <td className="table-td font-mono text-[12.5px] text-slate-500">{s.rut}</td>
+                  {/* Solo lo excepcional se marca: "Común" es el caso normal y
+                      va como texto, "Directivo" lleva la marca institucional. */}
                   <td className="table-td">
-                    <Badge tone={s.tipo === 'directivo' ? 'gold' : 'slate'}>
-                      {s.tipo === 'directivo' ? 'Directivo' : 'Común'}
-                    </Badge>
+                    {s.tipo === 'directivo' ? (
+                      <span className="chip chip-gold">Directivo</span>
+                    ) : (
+                      <span className="text-slate-500">Común</span>
+                    )}
                   </td>
                   <td className="table-td">
-                    <p className="font-medium text-brand-900">{s.contacto}</p>
-                    <p className="text-xs text-slate-400">{s.email}</p>
+                    <p className="text-slate-800">{s.contacto}</p>
+                    <p className="text-[12px] text-slate-400">{s.email}</p>
                   </td>
                   <td className="table-td">
-                    <Badge tone={s.estado === 'activo' ? 'jad' : 'rust'}>
+                    <Status tone={s.estado === 'activo' ? 'neutral' : 'muted'}>
                       {s.estado === 'activo' ? 'Activo' : 'Inactivo'}
-                    </Badge>
+                    </Status>
                   </td>
                   <td className="table-td">
-                    <Badge tone={s.pago === 'al-dia' ? 'jad' : 'rust'}>
+                    <Status tone={s.pago === 'al-dia' ? 'neutral' : 'alert'}>
                       {s.pago === 'al-dia' ? 'Al día' : 'Deudor'}
-                    </Badge>
+                    </Status>
                   </td>
-                  <td className="table-td text-slate-500">{s.ultimoPago}</td>
-                  <td className="table-td">
-                    <div className="flex items-center justify-end gap-1">
-                      <button
-                        onClick={() => setSelected(s)}
-                        className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-brand-700"
-                        aria-label="Ver detalle"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
-                      <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-brand-700" aria-label="Más">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
+                  <td className="table-num text-slate-500">{s.ultimoPago}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
         {filtered.length === 0 && (
-          <div className="px-5 py-10 text-center text-sm text-slate-500">
-            No se encontraron socios con los filtros seleccionados.
+          <div className="px-4 py-12 text-center">
+            <p className="text-[13px] text-slate-500">Ningún socio coincide con esos filtros.</p>
+            <button onClick={limpiar} className="btn-link mt-1.5">
+              Limpiar filtros
+            </button>
           </div>
         )}
-        <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
-          <span>Mostrando {filtered.length} de {socios.length} socios</span>
-          <div className="flex items-center gap-1">
-            <button className="btn-ghost px-2 py-1 text-xs">Anterior</button>
-            <button className="rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">1</button>
-            <button className="btn-ghost px-2 py-1 text-xs">Siguiente</button>
+
+        {filtered.length > 0 && (
+          <div className="flex items-center justify-between border-t border-line px-4 py-2.5 text-[12px] text-slate-400">
+            <span>
+              {filtered.length} de {socios.length} socios
+            </span>
+            <div className="flex items-center gap-0.5">
+              <button className="segment-item" disabled>
+                Anterior
+              </button>
+              <button className="segment-item segment-item-active">1</button>
+              <button className="segment-item" disabled>
+                Siguiente
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Detail drawer */}
-      {selected && (
-        <SocioDetailDrawer socio={selected} onClose={() => setSelected(null)} />
-      )}
-    </div>
-  );
-}
-
-function FilterPill({ label, value, onChange, options }: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: [string, string][];
-}) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <span className="hidden text-xs font-medium text-slate-400 sm:inline">{label}:</span>
-      <div className="flex rounded-lg border border-slate-200 bg-white p-0.5">
-        {options.map(([val, lbl]) => (
-          <button
-            key={val}
-            onClick={() => onChange(val)}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-              value === val ? 'bg-brand-50 text-brand-700' : 'text-slate-500 hover:text-brand-700'
-            }`}
-          >
-            {lbl}
-          </button>
-        ))}
-      </div>
+      {selected && <SocioDetailDrawer socio={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }
 
 function SocioDetailDrawer({ socio, onClose }: { socio: Socio; onClose: () => void }) {
+  const datos: [string, string, boolean?][] = [
+    ['RUT', socio.rut, true],
+    ['Categoría', socio.categoria],
+    ['Tipo de socio', socio.tipo === 'directivo' ? 'Directivo' : 'Común'],
+    ['Socio desde', socio.adhesion],
+    ['Contacto', socio.contacto],
+    ['Email', socio.email],
+    ['Teléfono', socio.telefono, true],
+    ['Último pago', socio.ultimoPago, true],
+  ];
+
   return (
     <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-brand-950/40" onClick={onClose} />
-      <aside className="absolute inset-y-0 right-0 w-full max-w-md overflow-y-auto bg-white shadow-soft animate-slide-in">
-        <div className="sticky top-0 flex items-center justify-between border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-sm font-bold text-white">
-              {socio.empresa.slice(0, 2).toUpperCase()}
-            </div>
-            <div>
-              <p className="text-sm font-bold text-brand-900">{socio.empresa}</p>
-              <p className="text-xs text-slate-400">{socio.id} · Socio desde {socio.adhesion}</p>
-            </div>
+      <div className="absolute inset-0 bg-slate-900/25" onClick={onClose} />
+      <aside className="animate-slide-in absolute inset-y-0 right-0 flex w-full max-w-sm flex-col border-l border-line bg-white shadow-pop">
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-line px-5 py-4">
+          <div className="min-w-0">
+            <p className="truncate text-[15px] font-semibold text-slate-900">{socio.empresa}</p>
+            <p className="mt-0.5 font-mono text-[12px] text-slate-400">{socio.id}</p>
           </div>
-          <button onClick={onClose} className="rounded-lg p-2 text-slate-400 hover:bg-slate-100" aria-label="Cerrar">
-            <X className="h-5 w-5" />
+          <button
+            onClick={onClose}
+            className="-mr-2 -mt-1 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            aria-label="Cerrar"
+          >
+            <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="p-5">
-          <div className="flex flex-wrap gap-2">
-            <Badge tone={socio.tipo === 'directivo' ? 'gold' : 'slate'}>
-              {socio.tipo === 'directivo' ? 'Socio directivo' : 'Socio común'}
-            </Badge>
-            <Badge tone={socio.estado === 'activo' ? 'jad' : 'rust'}>
-              {socio.estado === 'activo' ? 'Activo' : 'Inactivo'}
-            </Badge>
-            <Badge tone={socio.pago === 'al-dia' ? 'jad' : 'rust'}>
-              {socio.pago === 'al-dia' ? 'Al día' : 'Deudor'}
-            </Badge>
-          </div>
+        <div className="flex shrink-0 items-center gap-4 border-b border-line px-5 py-3">
+          <Status tone={socio.estado === 'activo' ? 'neutral' : 'muted'}>
+            {socio.estado === 'activo' ? 'Activo' : 'Inactivo'}
+          </Status>
+          <Status tone={socio.pago === 'al-dia' ? 'neutral' : 'alert'}>
+            {socio.pago === 'al-dia' ? 'Cuota al día' : 'Cuota vencida'}
+          </Status>
+        </div>
 
-          <div className="mt-5 space-y-3">
-            <DetailRow icon={FileText} label="RUT" value={socio.rut} mono />
-            <DetailRow icon={Users} label="Categoría" value={socio.categoria} />
-            <DetailRow icon={Mail} label="Email" value={socio.email} />
-            <DetailRow icon={Phone} label="Teléfono" value={socio.telefono} />
-            <DetailRow icon={Calendar} label="Último pago" value={socio.ultimoPago} />
-          </div>
-
-          <div className="mt-6">
-            <h3 className="mb-2 text-sm font-bold text-brand-900">Contacto principal</h3>
-            <div className="surface p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-brand-700">
-                  {socio.contacto.split(' ').map((n) => n[0]).slice(0, 2).join('')}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-brand-900">{socio.contacto}</p>
-                  <p className="text-xs text-slate-400">Representante legal</p>
-                </div>
-              </div>
+        <dl className="flex-1 overflow-y-auto px-5 py-1">
+          {datos.map(([label, value, mono]) => (
+            <div key={label} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5 last:border-0">
+              <dt className="shrink-0 text-[12.5px] text-slate-400">{label}</dt>
+              <dd className={`text-right text-[13px] text-slate-800 ${mono ? 'font-mono text-[12.5px]' : ''}`}>
+                {value}
+              </dd>
             </div>
-          </div>
+          ))}
+        </dl>
 
-          <div className="mt-6 grid grid-cols-2 gap-2">
-            <button className="btn-outline">Ver historial</button>
-            <button className="btn-primary">Editar socio</button>
-          </div>
+        <div className="flex shrink-0 gap-2 border-t border-line px-5 py-3">
+          <button className="btn-outline flex-1">Ver historial</button>
+          <button className="btn-primary flex-1">Editar socio</button>
         </div>
       </aside>
-    </div>
-  );
-}
-
-function DetailRow({ icon: Icon, label, value, mono }: { icon: typeof Mail; label: string; value: string; mono?: boolean }) {
-  return (
-    <div className="flex items-center gap-3 border-b border-slate-50 py-2.5">
-      <Icon className="h-4 w-4 text-slate-400" />
-      <span className="text-xs font-medium text-slate-400">{label}</span>
-      <span className={`ml-auto text-sm font-medium text-brand-900 ${mono ? 'font-mono' : ''}`}>{value}</span>
     </div>
   );
 }

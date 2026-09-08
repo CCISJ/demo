@@ -1,123 +1,130 @@
 'use client';
 
-import {
-  Plus, Briefcase, Users, Bell, FileText, TrendingUp,
-  ArrowRight, CheckCircle2, Clock, Building2, Lock,
-} from 'lucide-react';
+import { Plus } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import StatCard from '@/components/StatCard';
-import Badge from '@/components/Badge';
+import Status from '@/components/Status';
 import { useNav } from '@/components/navContext';
-import { ofertas, postulaciones } from '@/data/mockData';
+import { ofertas } from '@/data/mockData';
+
+const novedades = [
+  { t: 'Nueva postulación', d: 'Rodrigo Almirón en Operario de depósito', time: 'Hace 12 min' },
+  { t: 'Capacitación disponible', d: 'Gestión de equipos comerciales — 02/09', time: 'Hace 1 h' },
+  { t: 'Cuota al día', d: 'Pago de agosto registrado correctamente', time: 'Hace 3 h' },
+];
+
+const accesos = [
+  { title: 'Mis datos', desc: 'Información de la empresa', target: 'e-perfil' as const },
+  { title: 'Cambiar contraseña', desc: 'Seguridad de la cuenta', target: 'e-perfil' as const },
+  { title: 'Ver candidatos', desc: 'Postulaciones recibidas', target: 'e-candidatos' as const },
+];
 
 export default function EmpresaDashboard() {
   const { onNavigate } = useNav();
   const misOfertas = ofertas.filter((o) => o.empresa === 'Distribuidora San José SRL');
+  const listado = misOfertas.length ? misOfertas : ofertas.slice(0, 3);
   const activas = misOfertas.filter((o) => o.estado === 'activa').length;
   const nuevosCandidatos = misOfertas.reduce((a, o) => a + o.candidatos, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         title="Hola, Marta"
-        subtitle="Distribuidora San José SRL · Socio directivo"
-        actions={<button onClick={() => onNavigate('empresa', 'e-ofertas')} className="btn-gold"><Plus className="h-4 w-4" /> Publicar oferta</button>}
+        subtitle="Distribuidora San José SRL"
+        actions={
+          <button onClick={() => onNavigate('empresa', 'e-ofertas')} className="btn-primary">
+            <Plus className="h-3.5 w-3.5" strokeWidth={2} /> Publicar oferta
+          </button>
+        }
       />
 
-      {/* Socio status banner */}
-      <div className="surface flex flex-col gap-4 bg-gradient-to-br from-brand-700 to-brand-900 p-5 text-white sm:flex-row sm:items-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
-          <Building2 className="h-6 w-6 text-gold-400" />
+      {/*
+        La condición de socio era un panel verde a sangre con dos píldoras
+        encima. Es un dato de referencia, no un cartel: va en la misma tira que
+        el resto de las cifras.
+      */}
+      <div className="metric-strip">
+        <div className="metric">
+          <p className="metric-label">Condición</p>
+          <p className="mt-1 text-[15px] font-medium text-slate-900">Socio directivo</p>
+          <p className="metric-note">Desde 03/2018</p>
         </div>
-        <div className="flex-1">
-          <p className="text-sm font-semibold">Tu condición de socio</p>
-          <p className="text-xs text-brand-200">Socio directivo · Cuota al día · Próximo vencimiento: 31/08/2026</p>
+        <div className="metric">
+          <p className="metric-label">Cuota</p>
+          <p className="mt-1 text-[15px] font-medium text-slate-900">Al día</p>
+          <p className="metric-note">Vence el 31/08/2026</p>
         </div>
-        <div className="flex gap-2">
-          <Badge tone="jad" variant="solid">Al día</Badge>
-          <Badge tone="gold" variant="solid">Directivo</Badge>
+        <div className="metric">
+          <p className="metric-label">Ofertas activas</p>
+          <p className="metric-value">{activas}</p>
+        </div>
+        <div className="metric">
+          <p className="metric-label">Candidatos recibidos</p>
+          <p className="metric-value">{nuevosCandidatos}</p>
+          <p className="metric-note">5 esta semana</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard label="Ofertas activas" value={String(activas)} icon={Briefcase} tone="brand" />
-        <StatCard label="Candidatos nuevos" value={String(nuevosCandidatos)} icon={Users} tone="gold" trend={{ value: '+5 esta semana', up: true }} />
-        <StatCard label="Ofertas cerradas" value="2" icon={CheckCircle2} tone="slate" />
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Mis ofertas */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="surface lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-            <h2 className="text-base font-bold text-brand-900">Mis ofertas</h2>
-            <button onClick={() => onNavigate('empresa', 'e-ofertas')} className="text-xs font-semibold text-brand-600 hover:text-brand-800">Ver todas</button>
+          <div className="card-head">
+            <h2 className="card-title">Mis ofertas</h2>
+            <button onClick={() => onNavigate('empresa', 'e-ofertas')} className="btn-link">
+              Ver todas
+            </button>
           </div>
-          <div className="divide-y divide-slate-100">
-            {(misOfertas.length ? misOfertas : ofertas.slice(0, 3)).map((o) => (
-              <div key={o.id} className="flex items-center gap-3 px-5 py-3.5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Briefcase className="h-5 w-5" /></div>
+          <ul className="divide-y divide-line">
+            {listado.map((o) => (
+              <li key={o.id} className="flex items-center gap-3 px-4 py-2.5">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-brand-900">{o.puesto}</p>
-                  <p className="text-xs text-slate-400">{o.categoria} · cierra {o.cierra}</p>
+                  <p className="truncate text-[13px] font-medium text-slate-900">{o.puesto}</p>
+                  <p className="text-[12px] text-slate-400">
+                    {o.categoria} · cierra {o.cierra}
+                  </p>
                 </div>
-                <div className="text-right">
-                  <p className="flex items-center gap-1 text-sm font-bold text-brand-900"><Users className="h-3.5 w-3.5 text-slate-400" />{o.candidatos}</p>
-                  <Badge tone={o.estado === 'activa' ? 'jad' : 'slate'}>{o.estado === 'activa' ? 'Activa' : 'Cerrada'}</Badge>
-                </div>
-              </div>
+                <Status tone={o.estado === 'activa' ? 'neutral' : 'muted'}>
+                  {o.estado === 'activa' ? 'Activa' : 'Cerrada'}
+                </Status>
+                <p className="w-10 shrink-0 text-right font-mono text-[12.5px] tabular-nums text-slate-900">
+                  {o.candidatos}
+                </p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
-        {/* Notificaciones */}
         <div className="surface">
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-            <div className="flex items-center gap-2">
-              <Bell className="h-4 w-4 text-brand-600" />
-              <h2 className="text-base font-bold text-brand-900">Novedades</h2>
-            </div>
-            <button onClick={() => onNavigate('empresa', 'e-notificaciones')} className="text-xs font-semibold text-brand-600 hover:text-brand-800">Ver todas</button>
+          <div className="card-head">
+            <h2 className="card-title">Novedades</h2>
+            <button onClick={() => onNavigate('empresa', 'e-notificaciones')} className="btn-link">
+              Ver todas
+            </button>
           </div>
-          <div className="divide-y divide-slate-100">
-            {[
-              { t: 'Nueva postulación', d: 'Rodrigo Almirón en Operario de depósito', time: '12 min' },
-              { t: 'Capacitación disponible', d: 'Gestión de equipos comerciales — 02/09', time: '1 h' },
-              { t: 'Cuota al día', d: 'Pago de agosto registrado correctamente', time: '3 h' },
-            ].map((n, i) => (
-              <div key={i} className="px-5 py-3.5">
-                <div className="flex items-start gap-2">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-500" />
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-brand-900">{n.t}</p>
-                    <p className="text-xs text-slate-500">{n.d}</p>
-                    <p className="mt-0.5 text-[11px] text-slate-400">Hace {n.time}</p>
-                  </div>
+          <ul className="divide-y divide-line">
+            {novedades.map((n) => (
+              <li key={n.t} className="px-4 py-2.5">
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className="text-[13px] font-medium text-slate-900">{n.t}</p>
+                  <span className="shrink-0 whitespace-nowrap text-[12px] text-slate-400">{n.time}</span>
                 </div>
-              </div>
+                <p className="mt-0.5 text-[12.5px] text-slate-500">{n.d}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
 
-      {/* Quick links */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <QuickLink icon={FileText} title="Mis datos" desc="Actualizá la información de tu empresa" onClick={() => onNavigate('empresa', 'e-perfil')} />
-        <QuickLink icon={Lock} title="Cambiar contraseña" desc="Mantené tu cuenta segura" onClick={() => onNavigate('empresa', 'e-perfil')} />
-        <QuickLink icon={TrendingUp} title="Ver candidatos" desc="Revisá las postulaciones recibidas" onClick={() => onNavigate('empresa', 'e-candidatos')} />
+      <div className="surface flex flex-wrap divide-line sm:divide-x">
+        {accesos.map((a) => (
+          <button
+            key={a.title}
+            onClick={() => onNavigate('empresa', a.target)}
+            className="flex-1 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+          >
+            <p className="text-[13px] font-medium text-slate-900">{a.title}</p>
+            <p className="mt-0.5 text-[12px] text-slate-400">{a.desc}</p>
+          </button>
+        ))}
       </div>
     </div>
-  );
-}
-
-function QuickLink({ icon: Icon, title, desc, onClick }: { icon: typeof FileText; title: string; desc: string; onClick: () => void }) {
-  return (
-    <button onClick={onClick} className="surface surface-hover group flex items-center gap-3 p-4 text-left">
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600"><Icon className="h-5 w-5" /></span>
-      <div className="flex-1">
-        <p className="text-sm font-semibold text-brand-900">{title}</p>
-        <p className="text-xs text-slate-500">{desc}</p>
-      </div>
-      <ArrowRight className="h-4 w-4 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-500" />
-    </button>
   );
 }

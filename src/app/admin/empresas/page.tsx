@@ -1,2 +1,14 @@
 import AdminLayout from '@/components/layouts/AdminLayout';
-export default function Page() { return <AdminLayout section="empresas"><div className="surface flex flex-col items-center justify-center px-6 py-16 text-center"><h2 className="text-lg font-bold text-brand-900">Empresas</h2><p className="mt-1 text-sm text-slate-500">Esta sección forma parte del sistema y se encuentra disponible en el menú.</p></div></AdminLayout>; }
+
+export default function Page() {
+  return (
+    <AdminLayout section="empresas">
+      <div className="surface px-4 py-16 text-center">
+        <h2 className="text-[15px] font-semibold text-slate-900">Empresas</h2>
+        <p className="mx-auto mt-1 max-w-sm text-[13px] text-slate-500">
+          Esta sección todavía no está maquetada en la demo.
+        </p>
+      </div>
+    </AdminLayout>
+  );
+}

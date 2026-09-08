@@ -103,7 +103,7 @@ export default function AdminConfiguracion() {
       />
 
       {/* Tabs */}
-      <div className="inline-flex rounded-xl bg-slate-100 p-1">
+      <div className="segment">
         {([
           ['cuotas', 'Cuotas y costos', Wallet],
           ['notificaciones', 'Notificaciones', Bell],
@@ -111,11 +111,11 @@ export default function AdminConfiguracion() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
-              tab === id ? 'bg-white text-brand-800 shadow-sm' : 'text-slate-500 hover:text-brand-800'
+            className={`segment-item ${
+              tab === id ? 'segment-item-active' : ''
             }`}
           >
-            <Icon className="h-4 w-4" />
+            
             {label}
           </button>
         ))}
@@ -131,11 +131,10 @@ export default function AdminConfiguracion() {
           </div>
 
           {/* Valor de cuota */}
-          <div className="surface p-6">
+          <div className="surface p-5">
             <div className="flex items-start gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700"><Wallet className="h-5 w-5" /></span>
               <div>
-                <h2 className="text-base font-bold text-brand-900">Valor de la cuota societaria</h2>
+                <h2 className="card-title">Valor de la cuota societaria</h2>
                 <p className="mt-0.5 text-sm text-slate-500">
                   El valor se fija una única vez al año, en enero, y rige durante los 12 meses siguientes sin cambios.
                 </p>
@@ -178,9 +177,9 @@ export default function AdminConfiguracion() {
                     <tr key={c.anio} className="table-row">
                       <td className="table-td font-medium text-brand-900">
                         {c.anio}
-                        {i === historial.length - 1 && <Badge tone="jad" variant="soft" className="ml-2">Vigente</Badge>}
+                        {i === historial.length - 1 && <span className="chip chip-brand ml-2">Vigente</span>}
                       </td>
-                      <td className="table-td text-right font-bold text-brand-900">{formatPesos(c.valor)}</td>
+                      <td className="table-td text-right font-medium text-slate-900">{formatPesos(c.valor)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -189,11 +188,10 @@ export default function AdminConfiguracion() {
           </div>
 
           {/* Plazo de pago */}
-          <div className="surface p-6">
+          <div className="surface p-5">
             <div className="flex items-start gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold-50 text-gold-700"><CalendarClock className="h-5 w-5" /></span>
               <div>
-                <h2 className="text-base font-bold text-brand-900">Plazo de pago de cuotas</h2>
+                <h2 className="card-title">Plazo de pago de cuotas</h2>
                 <p className="mt-0.5 text-sm text-slate-500">
                   La cuota de un mes se abona durante ese mes y tiene plazo adicional hasta fin del período siguiente.
                 </p>
@@ -211,7 +209,7 @@ export default function AdminConfiguracion() {
                   onChange={(e) => setMesesPlazo(Math.max(0, Math.min(3, Number(e.target.value))))}
                 />
               </div>
-              <div className="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600 ring-1 ring-slate-100">
+              <div className="rounded-md border border-line px-3 py-2 text-[12.5px] text-slate-600">
                 Ejemplo: la cuota de <span className="font-semibold text-brand-900">enero</span> vence a fin de{' '}
                 <span className="font-semibold text-brand-900">{nombreMesVencimiento(mesesPlazo)}</span>.
               </div>
@@ -219,11 +217,10 @@ export default function AdminConfiguracion() {
           </div>
 
           {/* Gastos del mes */}
-          <div className="surface p-6">
+          <div className="surface p-5">
             <div className="flex items-start gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rust-50 text-rust-700"><Receipt className="h-5 w-5" /></span>
               <div>
-                <h2 className="text-base font-bold text-brand-900">Gastos del mes</h2>
+                <h2 className="card-title">Gastos del mes</h2>
                 <p className="mt-0.5 max-w-2xl text-sm text-slate-500">
                   Cargos adicionales que se <span className="font-medium text-brand-800">suman a la cuota societaria</span> de
                   cada socio ese mes (no son gastos propios del Centro). Se pueden agregar, editar o quitar.
@@ -263,8 +260,8 @@ export default function AdminConfiguracion() {
                     <tr><td colSpan={3} className="table-td text-center text-slate-400">Sin gastos adicionales este mes.</td></tr>
                   )}
                   <tr className="border-t border-slate-100 bg-slate-50/40">
-                    <td className="table-td font-bold text-brand-900">Total gastos del mes</td>
-                    <td className="table-td text-right font-bold text-brand-900">{formatPesos(totalGastos)}</td>
+                    <td className="table-td font-medium text-slate-900">Total gastos del mes</td>
+                    <td className="table-td text-right font-medium text-slate-900">{formatPesos(totalGastos)}</td>
                     <td className="table-td" />
                   </tr>
                 </tbody>
@@ -283,26 +280,23 @@ export default function AdminConfiguracion() {
               <button onClick={agregarGasto} className="btn-outline"><Plus className="h-4 w-4" /> Agregar</button>
             </div>
 
-            <div className="mt-5 flex items-center justify-between rounded-xl bg-brand-50 px-4 py-3 text-sm ring-1 ring-brand-100">
+            <div className="mt-4 flex items-center justify-between border-t border-line pt-3 text-[13px]">
               <span className="text-brand-800">Cuota ({formatPesos(valorCuota)}) + gastos del mes ({formatPesos(totalGastos)})</span>
-              <span className="text-base font-bold text-brand-900">= {formatPesos(totalPorSocio)} por socio</span>
+              <span className="card-title">= {formatPesos(totalPorSocio)} por socio</span>
             </div>
           </div>
 
           {/* Reintegros — pendiente de definición */}
-          <div className="surface flex flex-col gap-4 bg-gradient-to-br from-sol-50/60 to-white p-6 sm:flex-row sm:items-center">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sol-100 text-sol-600 ring-1 ring-sol-200">
-              <Clock className="h-7 w-7" />
+          <div className="surface">
+            <div className="card-head">
+              <h2 className="card-title">Reintegros a socios</h2>
+              <span className="chip">En definición</span>
             </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-bold text-brand-900">Reintegros a socios</h2>
-              <p className="mt-1 max-w-2xl text-sm text-slate-600">
-                El CCISJ indicó que cada socio tiene un valor de reintegro distinto, pero todavía no se definieron los
-                montos ni la forma en que se van a calcular. Este módulo se habilitará dentro de Configuración una vez
-                que esa información esté definida.
-              </p>
-            </div>
-            <Badge tone="sol" variant="soft">En definición</Badge>
+            <p className="max-w-2xl px-4 py-3 text-[13px] leading-relaxed text-slate-600">
+              El CCISJ indicó que cada socio tiene un valor de reintegro distinto, pero todavía no se
+              definieron los montos ni la forma en que se van a calcular. El módulo se habilita dentro de
+              Configuración una vez que esa información esté definida.
+            </p>
           </div>
         </div>
       )}
@@ -313,7 +307,7 @@ export default function AdminConfiguracion() {
           <div className="surface p-6 lg:col-span-1">
             <div className="flex items-center gap-2">
               <Send className="h-4 w-4 text-brand-600" />
-              <h2 className="text-base font-bold text-brand-900">Nueva notificación</h2>
+              <h2 className="card-title">Nueva notificación</h2>
             </div>
             <p className="mt-1 text-xs text-slate-500">Elegí prioridad y destinatario antes de publicar.</p>
 
@@ -382,26 +376,30 @@ export default function AdminConfiguracion() {
           {/* List */}
           <div className="surface lg:col-span-2">
             <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-              <h2 className="text-base font-bold text-brand-900">Notificaciones publicadas</h2>
-              <Badge tone="brand" variant="soft">{notis.length} en total</Badge>
+              <h2 className="card-title">Notificaciones publicadas</h2>
+              <span className="text-[12px] text-slate-400">{notis.length} en total</span>
             </div>
             <div className="divide-y divide-slate-100">
               {notis.map((n) => {
                 const Icon = catIcon[n.categoria];
                 const urgente = n.prioridad === 'emergente';
                 return (
-                  <div key={n.id} className={`flex items-start gap-3 px-5 py-4 ${urgente ? 'bg-rust-50/40' : ''}`}>
-                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${urgente ? 'bg-rust-100 text-rust-600' : 'bg-slate-100 text-slate-500'}`}>
-                      {urgente ? <AlertTriangle className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
-                    </span>
+                  <div
+                    key={n.id}
+                    className={`relative flex items-start gap-3 px-4 py-3 ${
+                      urgente ? 'before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-rust-500' : ''
+                    }`}
+                  >
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-brand-900">{n.titulo}</p>
-                      <p className="mt-0.5 text-sm text-slate-600">{n.cuerpo}</p>
-                      <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                        {urgente && <Badge tone="rust" variant="solid">Emergente</Badge>}
-                        <Badge tone={catTone[n.categoria]} variant="soft">{n.categoria}</Badge>
-                        <Badge tone={destTone[n.destinatario]} variant="outline">{destLabel[n.destinatario]}</Badge>
-                        <span className="text-xs text-slate-400">{n.fecha}</span>
+                      <p className="text-[13px] font-medium text-slate-900">{n.titulo}</p>
+                      <p className="mt-0.5 text-[13px] leading-relaxed text-slate-500">{n.cuerpo}</p>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-slate-400">
+                        {urgente && <span className="chip chip-alert">Emergente</span>}
+                        <span>{n.categoria}</span>
+                        <span className="text-slate-300">·</span>
+                        <span>{destLabel[n.destinatario]}</span>
+                        <span className="text-slate-300">·</span>
+                        <span>{n.fecha}</span>
                       </div>
                     </div>
                     <button onClick={() => quitarNoti(n.id)} className="rounded-lg p-1.5 text-slate-400 hover:bg-rust-50 hover:text-rust-600" aria-label="Eliminar notificación">
