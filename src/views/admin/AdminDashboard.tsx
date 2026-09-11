@@ -10,6 +10,8 @@ import {
   movimientosCaja,
   actividades,
   facturas,
+  candidatos,
+  periodoActual,
   formatPesos,
 } from "@/data/mockData";
 
@@ -38,9 +40,10 @@ export default function AdminDashboard() {
   const activos = socios.filter((s) => s.estado === "activo").length;
   const deudores = socios.filter((s) => s.pago === "deudor").length;
   const ofertasActivas = ofertas.filter((o) => o.estado === "activa").length;
-  const facturasPendientes = facturas.filter(
-    (f) => f.estado === "pendiente",
-  ).length;
+  // Lo que pide gestión es lo vencido, no lo que todavía está en plazo.
+  const facturasVencidas = facturas.filter((f) => f.estado === "vencida");
+  const montoVencido = facturasVencidas.reduce((a, f) => a + f.monto, 0);
+  const sinCv = candidatos.filter((c) => !c.cv).length;
   const ingresosMes = movimientosCaja
     .filter((m) => m.tipo === "ingreso")
     .reduce((a, m) => a + m.monto, 0);
@@ -60,7 +63,7 @@ export default function AdminDashboard() {
     <div className="space-y-5">
       <PageHeader
         title="Buen día, Martín"
-        subtitle="Período agosto 2026"
+        subtitle={`Período ${periodoActual.label.toLowerCase()}`}
         actions={
           <button className="btn-outline">
             <Download className="h-3.5 w-3.5" strokeWidth={1.75} /> Exportar
@@ -84,8 +87,8 @@ export default function AdminDashboard() {
         </div>
         <div className="metric">
           <p className="metric-label">Postulantes registrados</p>
-          <p className="metric-value">1.840</p>
-          <p className="metric-note">86 nuevos este mes</p>
+          <p className="metric-value">{candidatos.length}</p>
+          <p className="metric-note">{sinCv} todavía sin CV</p>
         </div>
         <div className="metric">
           <p className="metric-label">Ingresos del período</p>
@@ -211,17 +214,17 @@ export default function AdminDashboard() {
               <li className="flex items-start justify-between gap-3 px-4 py-3">
                 <div>
                   <p className="text-[13px] text-ink-body">
-                    Facturas impagas
+                    Comprobantes vencidos
                   </p>
                   <p className="mt-0.5 text-[12px] text-ink-faint">
-                    FEU emitidas sin cobrar
+                    {formatPesos(montoVencido)} sin cobrar
                   </p>
                 </div>
                 <button
                   onClick={() => onNavigate("admin", "facturacion")}
                   className="shrink-0"
                 >
-                  <Status tone="warn">{facturasPendientes} facturas</Status>
+                  <Status tone="warn">{facturasVencidas.length} facturas</Status>
                 </button>
               </li>
             </ul>

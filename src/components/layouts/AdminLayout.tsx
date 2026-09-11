@@ -2,11 +2,15 @@
 
 import { useState, type ReactNode } from 'react';
 import {
-  LayoutDashboard, Building2, Briefcase, Users, Bell, Wallet, FileText,
+  LayoutDashboard, Briefcase, Users, Bell, Wallet, FileText,
   FolderKanban, Settings, Search, Menu, X, ChevronDown, LogOut, UserCircle,
 } from 'lucide-react';
 import Logo from '@/components/Logo';
 import { useNav, type AdminSection } from '@/components/navContext';
+import { sinLeerDe } from '@/data/mockData';
+
+/** Lo que está sin leer, contado una sola vez y leído desde los datos. */
+const sinLeer = sinLeerDe('admin');
 
 interface NavItem {
   id: AdminSection;
@@ -22,21 +26,18 @@ interface NavGroup {
 }
 
 /**
- * Once secciones en una lista plana se leen como un muro. Agrupadas por área
+ * Nueve secciones en una lista plana se leen como un muro. Agrupadas por área
  * de trabajo, el ojo salta al bloque correcto y recién ahí lee.
+ *
+ * Socios va arriba, suelto: el socio es la entidad central del sistema y un
+ * rótulo de grupo sobre un solo ítem es un renglón que no ordena nada.
  */
 const groups: NavGroup[] = [
   {
     items: [
       { id: 'inicio', label: 'Inicio', icon: LayoutDashboard },
-      { id: 'notificaciones', label: 'Notificaciones', icon: Bell, count: 3 },
-    ],
-  },
-  {
-    title: 'Institución',
-    items: [
+      { id: 'notificaciones', label: 'Notificaciones', icon: Bell, count: sinLeer },
       { id: 'socios', label: 'Socios', icon: Users },
-      { id: 'empresas', label: 'Empresas', icon: Building2 },
     ],
   },
   {
@@ -64,7 +65,6 @@ const groups: NavGroup[] = [
 const sectionTitles: Record<AdminSection, string> = {
   inicio: 'Inicio',
   socios: 'Socios',
-  empresas: 'Empresas',
   bolsa: 'Bolsa de trabajo',
   candidatos: 'Búsqueda de candidatos',
   postulantes: 'Postulantes',
@@ -159,7 +159,11 @@ export default function AdminLayout({ children, section }: AdminLayoutProps) {
               aria-label="Notificaciones"
             >
               <Bell className="h-[18px] w-[18px]" strokeWidth={1.75} />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
+              {/* El punto avisa que hay algo sin leer. Si no hay nada, no hay
+                  punto: un aviso permanente deja de ser un aviso. */}
+              {sinLeer > 0 && (
+                <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
+              )}
             </button>
 
             <button className="flex items-center gap-2 py-1 pl-1 pr-2 transition-colors hover:bg-band">

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 export type Experience = 'login' | 'admin' | 'empresa' | 'postulante';
 
 export type AdminSection =
-  | 'inicio' | 'socios' | 'empresas' | 'bolsa' | 'candidatos' | 'postulantes'
+  | 'inicio' | 'socios' | 'bolsa' | 'candidatos' | 'postulantes'
   | 'notificaciones' | 'caja' | 'facturacion' | 'gestoria' | 'configuracion';
 export type EmpresaSection = 'e-inicio' | 'e-ofertas' | 'e-candidatos' | 'e-notificaciones' | 'e-perfil';
 export type PostulanteSection = 'p-inicio' | 'p-empleos' | 'p-postulaciones' | 'p-cv' | 'p-notificaciones';
@@ -22,7 +22,6 @@ const routes: Record<string, string> = {
   'login:inicio': '/',
   'admin:inicio': '/admin',
   'admin:socios': '/admin/socios',
-  'admin:empresas': '/admin/empresas',
   'admin:bolsa': '/admin/bolsa',
   'admin:candidatos': '/admin/candidatos',
   'admin:postulantes': '/admin/postulantes',

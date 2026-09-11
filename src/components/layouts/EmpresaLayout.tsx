@@ -6,6 +6,10 @@ import {
 } from 'lucide-react';
 import Logo from '@/components/Logo';
 import { useNav, type EmpresaSection } from '@/components/navContext';
+import { sinLeerDe } from '@/data/mockData';
+
+/** Lo que ese portal tiene sin leer, contado desde los datos. */
+const sinLeer = sinLeerDe('empresa');
 
 interface NavItem {
   id: EmpresaSection;
@@ -18,7 +22,7 @@ const items: NavItem[] = [
   { id: 'e-inicio', label: 'Inicio', icon: LayoutDashboard },
   { id: 'e-ofertas', label: 'Mis ofertas', icon: Briefcase },
   { id: 'e-candidatos', label: 'Candidatos', icon: Users },
-  { id: 'e-notificaciones', label: 'Notificaciones', icon: Bell, count: 3 },
+  { id: 'e-notificaciones', label: 'Notificaciones', icon: Bell, count: sinLeer },
   { id: 'e-perfil', label: 'Mi empresa', icon: Building2 },
 ];
 
@@ -104,7 +108,9 @@ export default function EmpresaLayout({ children, section }: EmpresaLayoutProps)
               aria-label="Notificaciones"
             >
               <Bell className="h-[18px] w-[18px]" strokeWidth={1.75} />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
+              {sinLeer > 0 && (
+                <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
+              )}
             </button>
 
             <button className="flex items-center gap-2 py-1 pl-1 pr-2 transition-colors hover:bg-band">

@@ -4,26 +4,33 @@ import { Plus } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import Status from '@/components/Status';
 import { useNav } from '@/components/navContext';
-import { ofertas } from '@/data/mockData';
+import {
+  ofertas,
+  socios,
+  configCuotas,
+  nombreMesVencimiento,
+  periodoActual,
+  notificacionesDe,
+} from '@/data/mockData';
 
-const novedades = [
-  { t: 'Nueva postulación', d: 'Rodrigo Almirón en Operario de depósito', time: 'Hace 12 min' },
-  { t: 'Capacitación disponible', d: 'Gestión de equipos comerciales — 02/09', time: 'Hace 1 h' },
-  { t: 'Cuota al día', d: 'Pago de agosto registrado correctamente', time: 'Hace 3 h' },
-];
+/** La empresa que tiene la sesión abierta en el portal. */
+const socio = socios[0];
 
 const accesos = [
-  { title: 'Mis datos', desc: 'Información de la empresa', target: 'e-perfil' as const },
-  { title: 'Cambiar contraseña', desc: 'Seguridad de la cuenta', target: 'e-perfil' as const },
+  { title: 'Mis datos', desc: 'Contacto y número de BPS', target: 'e-perfil' as const },
+  { title: 'Mi cuota', desc: 'Qué se paga este mes', target: 'e-perfil' as const },
   { title: 'Ver candidatos', desc: 'Postulaciones recibidas', target: 'e-candidatos' as const },
 ];
 
 export default function EmpresaDashboard() {
   const { onNavigate } = useNav();
-  const misOfertas = ofertas.filter((o) => o.empresa === 'Distribuidora San José SRL');
+  const misOfertas = ofertas.filter((o) => o.empresa === socio.empresa);
   const listado = misOfertas.length ? misOfertas : ofertas.slice(0, 3);
   const activas = misOfertas.filter((o) => o.estado === 'activa').length;
   const nuevosCandidatos = misOfertas.reduce((a, o) => a + o.candidatos, 0);
+  // Las novedades son las mismas notificaciones del portal, no una lista
+  // aparte que se escribe a mano y se desfasa de la campana del menú.
+  const novedades = notificacionesDe('empresa').slice(0, 3);
 
   return (
     <div className="space-y-4">
@@ -45,22 +52,30 @@ export default function EmpresaDashboard() {
       <div className="metric-strip">
         <div className="metric">
           <p className="metric-label">Condición</p>
-          <p className="mt-1 text-[15px] font-medium text-ink">Socio directivo</p>
-          <p className="metric-note">Desde 03/2018</p>
+          <p className="mt-1 text-[15px] font-medium text-ink">
+            {socio.tipo === 'directivo' ? 'Socio directivo' : 'Socio común'}
+          </p>
+          <p className="metric-note">Desde {socio.adhesion}</p>
         </div>
         <div className="metric">
           <p className="metric-label">Cuota</p>
-          <p className="mt-1 text-[15px] font-medium text-ink">Al día</p>
-          <p className="metric-note">Vence el 31/08/2026</p>
+          <p className="mt-1 text-[15px] font-medium text-ink">
+            {socio.pago === 'al-dia' ? 'Al día' : 'Vencida'}
+          </p>
+          <p className="metric-note">
+            Plazo hasta fin de {nombreMesVencimiento(configCuotas.mesesPlazo, periodoActual.mes)}
+          </p>
         </div>
         <div className="metric">
           <p className="metric-label">Ofertas activas</p>
           <p className="metric-value">{activas}</p>
         </div>
         <div className="metric">
-          <p className="metric-label">Candidatos recibidos</p>
+          <p className="metric-label">Postulaciones recibidas</p>
           <p className="metric-value">{nuevosCandidatos}</p>
-          <p className="metric-note">5 esta semana</p>
+          <p className="metric-note">
+            En {misOfertas.length} {misOfertas.length === 1 ? 'oferta publicada' : 'ofertas publicadas'}
+          </p>
         </div>
       </div>
 
@@ -101,12 +116,12 @@ export default function EmpresaDashboard() {
           </div>
           <ul className="divide-y divide-line">
             {novedades.map((n) => (
-              <li key={n.t} className="px-4 py-2.5">
+              <li key={n.id} className="px-4 py-2.5">
                 <div className="flex items-baseline justify-between gap-2">
-                  <p className="text-[13px] font-medium text-ink">{n.t}</p>
-                  <span className="shrink-0 whitespace-nowrap text-[12px] text-ink-faint">{n.time}</span>
+                  <p className={`text-[13px] text-ink ${n.leida ? '' : 'font-medium'}`}>{n.titulo}</p>
+                  <span className="shrink-0 whitespace-nowrap text-[12px] text-ink-faint">{n.fecha}</span>
                 </div>
-                <p className="mt-0.5 text-[12.5px] text-ink-mute">{n.d}</p>
+                <p className="mt-0.5 line-clamp-2 text-[12.5px] text-ink-mute">{n.cuerpo}</p>
               </li>
             ))}
           </ul>

@@ -211,12 +211,14 @@ function SocioDetailDrawer({ socio, onClose }: { socio: Socio; onClose: () => vo
 
   const datos: [string, string, boolean?][] = [
     ['RUT', socio.rut, true],
+    ['Nº BPS', socio.bps, true],
     ['Categoría', socio.categoria],
     ['Tipo de socio', socio.tipo === 'directivo' ? 'Directivo' : 'Común'],
     ['Socio desde', socio.adhesion],
     ['Contacto', socio.contacto],
     ['Email', socio.email],
     ['Teléfono', socio.telefono, true],
+    ['Domicilio', socio.domicilio],
     ['Último pago', socio.ultimoPago, true],
   ];
 
@@ -306,6 +308,35 @@ function SocioDetailDrawer({ socio, onClose }: { socio: Socio; onClose: () => vo
                 {formatPesos(cuotaBase + gastosMes + reintegro)}
               </span>
             </div>
+          </div>
+
+          {/*
+            La cuenta del portal es del socio, no una entidad aparte: el CCISJ
+            la crea, la habilita o la deshabilita, y desde ahí el socio mantiene
+            sus datos de contacto. Por eso vive en su ficha y no en una pantalla
+            de "empresas" que duplicaría este mismo listado.
+          */}
+          <div className="card-head">
+            <h3 className="card-title">Acceso al portal</h3>
+          </div>
+          <div className="px-5 py-3">
+            <div className="flex items-baseline justify-between gap-4 py-1.5">
+              <span className="text-[12.5px] text-ink-faint">Estado de la cuenta</span>
+              <Status tone={socio.cuentaActiva ? 'neutral' : 'alert'}>
+                {socio.cuentaActiva ? 'Habilitada' : 'Deshabilitada'}
+              </Status>
+            </div>
+            <div className="flex items-baseline justify-between gap-4 py-1.5">
+              <span className="text-[12.5px] text-ink-faint">Último acceso</span>
+              <span className="font-mono text-[12.5px] text-ink-body">{socio.ultimoAcceso}</span>
+            </div>
+            <p className="mt-2 border-t border-hair pt-2.5 text-[12px] leading-relaxed text-ink-faint">
+              Desde el portal, el socio actualiza su teléfono, su email, su domicilio y su número
+              de BPS. El resto de la ficha solo se cambia desde acá.
+            </p>
+            <button className="btn-outline mt-2.5 w-full">
+              {socio.cuentaActiva ? 'Deshabilitar acceso' : 'Habilitar acceso'}
+            </button>
           </div>
         </div>
 

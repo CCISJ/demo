@@ -3,6 +3,7 @@
 import { Plus, Download, Search } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import Status from '@/components/Status';
+import { useNav } from '@/components/navContext';
 import {
   movimientosCaja,
   facturas,
@@ -11,6 +12,7 @@ import {
   cuotasPorAnio,
   gastosDelMes,
   totalMensualSocio,
+  periodoActual,
 } from '@/data/mockData';
 
 const estadoFactura = {
@@ -22,30 +24,25 @@ const estadoFactura = {
 const cuotaBase = cuotasPorAnio[cuotasPorAnio.length - 1].valor;
 const gastosMes = gastosDelMes.reduce((a, g) => a + g.monto, 0);
 
-const buscarSocio = (empresa: string) => socios.find((s) => s.empresa === empresa);
-
 /**
- * Los importes salen del modelo, no escritos a mano: cuota vigente + gastos
- * del mes + el reintegro propio de ese socio. Así, si alguien cambia el
- * reintegro en Configuración o en la ficha, la cifra de Caja acompaña.
+ * La tabla sale de los socios, no de una lista escrita a mano: son los doce,
+ * con el importe que le toca a cada uno —cuota vigente + gastos del mes + su
+ * reintegro—. Si alguien cambia un reintegro en Configuración o en la ficha,
+ * esta cifra acompaña sola.
  */
-const pagosSocios = [
-  { socio: 'Distribuidora San José SRL', cuota: 'Agosto 2026', venc: '30/09/2026', estado: 'pagada' as const },
-  { socio: 'Frigorífico Río Negro SA', cuota: 'Agosto 2026', venc: '30/09/2026', estado: 'pagada' as const },
-  { socio: 'Farmacity San José', cuota: 'Junio 2026', venc: '31/07/2026', estado: 'vencida' as const },
-  { socio: 'Transportes del Sur', cuota: 'Mayo 2026', venc: '30/06/2026', estado: 'vencida' as const },
-  { socio: 'Tecnología MóvilUY', cuota: 'Agosto 2026', venc: '30/09/2026', estado: 'pendiente' as const },
-].map((p) => {
-  const s = buscarSocio(p.socio);
-  const reintegro = s?.reintegro ?? 0;
-  return {
-    ...p,
-    reintegro,
-    monto: totalMensualSocio({ reintegro }, cuotaBase, gastosMes),
-  };
-});
+const cuotasDelMes = socios.map((s) => ({
+  socio: s.empresa,
+  id: s.id,
+  reintegro: s.reintegro ?? 0,
+  ultimoPago: s.ultimoPago,
+  estado: s.pago === 'al-dia' ? ('pagada' as const) : ('vencida' as const),
+  monto: totalMensualSocio(s, cuotaBase, gastosMes),
+}));
+
+const cobrado = cuotasDelMes.filter((c) => c.estado === 'pagada').reduce((a, c) => a + c.monto, 0);
 
 export default function AdminCaja() {
+  const { onNavigate } = useNav();
   const ingresos = movimientosCaja.filter((m) => m.tipo === 'ingreso').reduce((a, m) => a + m.monto, 0);
   const egresos = movimientosCaja.filter((m) => m.tipo === 'egreso').reduce((a, m) => a + m.monto, 0);
   const saldo = ingresos - egresos;
@@ -54,7 +51,7 @@ export default function AdminCaja() {
     <div className="space-y-4">
       <PageHeader
         title="Caja"
-        subtitle="Agosto 2026"
+        subtitle={periodoActual.label}
         actions={
           <>
             <button className="btn-outline">
@@ -120,14 +117,15 @@ export default function AdminCaja() {
           </div>
         </div>
 
-        {/* Facturación electrónica */}
+        {/* Facturación electrónica: un asomo, no el listado entero. El listado
+            vive en su propia pantalla, que es donde se trabaja con él. */}
         <div className="surface flex flex-col">
           <div className="card-head">
-            <h2 className="card-title">Facturas</h2>
+            <h2 className="card-title">Últimos comprobantes</h2>
             <span className="chip chip-gold">FEU</span>
           </div>
           <ul className="flex-1 divide-y divide-line">
-            {facturas.map((f) => {
+            {facturas.slice(0, 6).map((f) => {
               const estado = estadoFactura[f.estado];
               return (
                 <li key={f.id} className="px-4 py-2.5">
@@ -148,7 +146,9 @@ export default function AdminCaja() {
             })}
           </ul>
           <div className="border-t border-line p-2.5">
-            <button className="btn-outline w-full">Ver todas las facturas</button>
+            <button onClick={() => onNavigate('admin', 'facturacion')} className="btn-outline w-full">
+              Ver facturación
+            </button>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@ export default function AdminCaja() {
       {/* Cuotas societarias */}
       <div className="surface overflow-hidden">
         <div className="card-head">
-          <h2 className="card-title">Cuotas societarias</h2>
+          <h2 className="card-title">Cuotas de {periodoActual.label.toLowerCase()}</h2>
           <span className="font-mono text-[12px] text-ink-faint">
             Base {formatPesos(cuotaBase + gastosMes)} + reintegro
           </span>
@@ -166,35 +166,41 @@ export default function AdminCaja() {
             <thead>
               <tr className="table-head">
                 <th className="table-th">Socio</th>
-                <th className="table-th">Cuota</th>
-                <th className="table-th">Vencimiento</th>
                 <th className="table-th">Estado</th>
+                <th className="table-th text-right">Último pago</th>
                 <th className="table-th text-right">Reintegro</th>
-                <th className="table-th text-right">Total</th>
+                <th className="table-th text-right">Total del mes</th>
               </tr>
             </thead>
             <tbody>
-              {pagosSocios.map((p) => (
+              {cuotasDelMes.map((c) => (
                 <tr
-                  key={p.socio}
-                  className={`table-row ${p.estado === 'vencida' ? 'row-alert' : 'row-flag'}`}
+                  key={c.id}
+                  className={`table-row ${c.estado === 'vencida' ? 'row-alert' : 'row-flag'}`}
                 >
-                  <td className="table-td font-medium text-ink">{p.socio}</td>
-                  <td className="table-td text-ink-mute">{p.cuota}</td>
-                  <td className="table-td whitespace-nowrap font-mono text-[12.5px] text-ink-mute">{p.venc}</td>
+                  <td className="table-td font-medium text-ink">{c.socio}</td>
                   <td className="table-td">
-                    <Status tone={estadoFactura[p.estado].tone}>{estadoFactura[p.estado].label}</Status>
+                    <Status tone={estadoFactura[c.estado].tone}>
+                      {c.estado === 'pagada' ? 'Cobrada' : 'Con deuda'}
+                    </Status>
                   </td>
+                  <td className="table-num text-ink-mute">{c.ultimoPago}</td>
                   {/* Sin reintegro se pone un guion, no un cero: el socio no
                       tiene el cargo, no es que le toque cero. */}
                   <td className="table-num text-ink-mute">
-                    {p.reintegro ? formatPesos(p.reintegro) : '—'}
+                    {c.reintegro ? formatPesos(c.reintegro) : '—'}
                   </td>
-                  <td className="table-num font-semibold">{formatPesos(p.monto)}</td>
+                  <td className="table-num font-semibold">{formatPesos(c.monto)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="flex items-baseline justify-between gap-3 border-t border-line bg-band px-5 py-3 text-[12.5px]">
+          <span className="text-ink-mute">
+            {cuotasDelMes.filter((c) => c.estado === 'pagada').length} de {cuotasDelMes.length} cobradas
+          </span>
+          <span className="font-mono font-semibold tabular-nums text-ink">{formatPesos(cobrado)}</span>
         </div>
       </div>
     </div>

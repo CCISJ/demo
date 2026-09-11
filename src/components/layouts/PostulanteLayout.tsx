@@ -6,6 +6,10 @@ import {
 } from 'lucide-react';
 import Logo from '@/components/Logo';
 import { useNav, type PostulanteSection } from '@/components/navContext';
+import { sinLeerDe } from '@/data/mockData';
+
+/** Lo que ese portal tiene sin leer, contado desde los datos. */
+const sinLeer = sinLeerDe('postulante');
 
 interface NavItem {
   id: PostulanteSection;
@@ -61,7 +65,11 @@ export default function PostulanteLayout({ children, section }: PostulanteLayout
             aria-label="Notificaciones"
           >
             <Bell className="h-5 w-5" />
-            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
+            {/* El punto avisa que hay algo sin leer. Si no hay nada, no hay
+                punto: un aviso permanente deja de ser un aviso. */}
+            {sinLeer > 0 && (
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-alert" />
+            )}
           </button>
           <div className="flex items-center gap-2 rounded-md py-1 pl-1 pr-2 transition-colors hover:bg-band">
             <div className="flex h-7 w-7 items-center justify-center rounded-md bg-brand-700 text-[11px] font-semibold text-white">RA</div>

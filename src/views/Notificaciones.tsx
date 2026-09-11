@@ -3,41 +3,38 @@
 import { useState } from 'react';
 import { CheckCheck } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import { notificaciones, type NotifCategoria } from '@/data/mockData';
-
-const categorias: NotifCategoria[] = [
-  'Capacitaciones',
-  'Eventos',
-  'Comunicados',
-  'Bolsa de trabajo',
-  'Beneficios para socios',
-];
+import { categoriasPorPortal, notificacionesDe, type Portal } from '@/data/mockData';
 
 const destinatarioLabel: Record<string, string> = {
   directivos: 'Solo socios directivos',
   'no-directivos': 'Solo socios no directivos',
+  postulantes: 'Solo postulantes',
   todos: '',
 };
 
 interface NotificacionesProps {
-  variant?: 'admin' | 'empresa' | 'postulante';
+  /**
+   * Qué portal está mirando. Decide qué notificaciones llegan: antes las tres
+   * pantallas mostraban la lista completa, con el resultado de que el
+   * postulante leía "Tu cuota de agosto vence".
+   */
+  variant?: Portal;
 }
 
 export default function Notificaciones({ variant = 'postulante' }: NotificacionesProps) {
+  const categorias = categoriasPorPortal[variant];
   const [tab, setTab] = useState<'nuevas' | 'leidas'>('nuevas');
-  const [prefs, setPrefs] = useState<Record<string, boolean>>({
-    Capacitaciones: true,
-    Eventos: true,
-    Comunicados: true,
-    'Bolsa de trabajo': true,
-    'Beneficios para socios': true,
-  });
+  const [prefs, setPrefs] = useState<Record<string, boolean>>(
+    Object.fromEntries(categorias.map((c) => [c, true])),
+  );
 
-  const filtered = notificaciones
+  const propias = notificacionesDe(variant);
+
+  const filtered = propias
     .filter((n) => (tab === 'nuevas' ? !n.leida : n.leida))
     .sort((a, b) => (a.prioridad === b.prioridad ? 0 : a.prioridad === 'emergente' ? -1 : 1));
 
-  const nuevasCount = notificaciones.filter((n) => !n.leida).length;
+  const nuevasCount = propias.filter((n) => !n.leida).length;
 
   return (
     <div className="space-y-4">
@@ -94,7 +91,11 @@ export default function Notificaciones({ variant = 'postulante' }: Notificacione
                   <div className={`mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 ${!n.leida ? 'pl-3.5' : ''}`}>
                     {urgente && <span className="chip chip-alert">Emergente</span>}
                     <span className="text-[12px] text-ink-faint">{n.categoria}</span>
-                    {destinatarioLabel[n.destinatario] && (
+                    {/* A quién iba dirigida solo importa cuando explica algo:
+                        al admin, que decide el alcance, y al socio directivo,
+                        que así entiende por qué le llegó. Al postulante,
+                        "Solo postulantes" no le dice nada nuevo. */}
+                    {variant !== 'postulante' && destinatarioLabel[n.destinatario] && (
                       <>
                         <span className="text-[12px] text-ink-ghost">·</span>
                         <span className="text-[12px] text-ink-faint">{destinatarioLabel[n.destinatario]}</span>

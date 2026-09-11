@@ -56,9 +56,12 @@ export default function AdminBolsa() {
           <p className="metric-label">Ofertas cerradas</p>
           <p className="metric-value">{cerradas}</p>
         </div>
+        {/* Cuenta postulaciones, no personas: un mismo postulante se anota en
+            varias ofertas y llamarlo "candidatos" lo hacía parecer el padrón. */}
         <div className="metric">
-          <p className="metric-label">Candidatos totales</p>
+          <p className="metric-label">Postulaciones recibidas</p>
           <p className="metric-value">{candidatos}</p>
+          <p className="metric-note">Sumadas todas las ofertas</p>
         </div>
       </div>
 
