@@ -3,3 +3,8 @@ node_modules/
 Claude outputs/
 # typescript
 *.tsbuildinfo
+
+# Lo genera Next en cada dev/build y alterna entre .next/dev/types y
+# .next/types, así que versionado ensucia el árbol de todo el equipo.
+# El propio archivo dice "should not be edited".
+next-env.d.ts
